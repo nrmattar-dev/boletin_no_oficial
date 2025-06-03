@@ -3,7 +3,6 @@ import math
 import re
 from markupsafe import Markup
 from datetime import datetime
-from dotenv import load_dotenv
 import os
 import psycopg2
 
@@ -12,15 +11,17 @@ app = Flask(__name__)
 AVISOS_POR_PAGINA = 50  # Cantidad de avisos por página
 
 def obtener_conexion():
-    #load_dotenv()
-    return psycopg2.connect(
-        host=os.getenv('POSTGRES_HOST'),
-        dbname=os.getenv('POSTGRES_DATABASE'),
-        user=os.getenv('POSTGRES_USER'),
-        password=os.getenv('POSTGRES_PASSWORD'),
-        port=os.getenv('POSTGRES_PORT', '5432'),
-        sslmode='require'
-    )
+    user = os.getenv('POSTGRES_USER')
+    password = os.getenv('POSTGRES_PASSWORD')
+    host = os.getenv('POSTGRES_HOST')
+    port = os.getenv('POSTGRES_PORT', '5432')
+    dbname = os.getenv('POSTGRES_DATABASE')
+
+    # Armar la URL
+    connection_url = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
+
+    # Conectar
+    return psycopg2.connect(connection_url)
 
 def obtener_fechas():
     conn = obtener_conexion()
