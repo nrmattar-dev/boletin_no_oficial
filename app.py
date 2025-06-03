@@ -57,7 +57,7 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None):
     cursor.execute(count_query + where_clause, params)
     total_avisos = cursor.fetchone()[0]
 
-    full_query = base_query + where_clause + ' ORDER BY Id DESC LIMIT %s OFFSET %s'
+    full_query = base_query + where_clause + ' ORDER BY FechaPublicacion DESC, Id LIMIT %s OFFSET %s'
     cursor.execute(full_query, params + [AVISOS_POR_PAGINA, offset])
     rows = cursor.fetchall()
     conn.close()
