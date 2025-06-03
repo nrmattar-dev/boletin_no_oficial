@@ -22,7 +22,7 @@ def obtener_fechas():
     fecha_desde, fecha_maxima = cursor.fetchone()
     conn.close()
     if fecha_maxima:
-        fecha_maxima = fecha_maxima.strftime('%Y-%m-%d')
+        fecha_maxima = fecha_maxima.strftime('%Y-%m-%d') 
     return fecha_desde, fecha_maxima
 
 def convertir_negritas(texto):
@@ -36,7 +36,7 @@ def cortar_texto(texto, limite=500):
     resto = texto[len(corte):]
     return corte, resto
 
-def obtener_avisos_paginado(pagina, fecha_filtro=None):
+def obtener_avisos_paginado(pagina, fecha_filtro=None,titulo_filtro=None):
     offset = (pagina - 1) * AVISOS_POR_PAGINA
     conn = obtener_conexion()
     cursor = conn.cursor()
@@ -47,12 +47,23 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None):
     '''
     count_query = 'SELECT COUNT(*) FROM avisos'
 
-    params = []
     where_clause = ''
+    conditions = []  # Initialize an empty list to hold individual conditions
+    params = []      # Initialize an empty list to hold parameters for the SQL query
 
     if fecha_filtro:
-        where_clause = ' WHERE DATE(FechaPublicacion) = %s'
+        conditions.append("DATE(FechaPublicacion) = %s")
         params.append(fecha_filtro)
+
+    if titulo_filtro:
+        palabras = [p.strip().upper() for p in titulo_filtro.split(',') if p.strip()]
+        for palabra in palabras:
+            conditions.append("UPPER(Titulo) LIKE %s")
+            params.append(f'%{palabra}%')
+
+    # Construct the final where_clause
+    if conditions:
+        where_clause = " WHERE " + " AND ".join(conditions)     
 
     cursor.execute(count_query + where_clause, params)
     total_avisos = cursor.fetchone()[0]
@@ -73,7 +84,8 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None):
 @app.route('/<int:pagina>')
 def index(pagina=1):
     fecha_filtro = request.args.get('fecha')
-    avisos_pagina, total_paginas = obtener_avisos_paginado(pagina, fecha_filtro)
+    titulo_filtro = request.args.get('titulo')
+    avisos_pagina, total_paginas = obtener_avisos_paginado(pagina, fecha_filtro, titulo_filtro)
     avisos_final = []
 
     for aviso in avisos_pagina:

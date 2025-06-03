@@ -41,7 +41,7 @@
             border: 1px solid #fed7aa;
             padding: 10px;
             border-radius: 8px;
-        }		
+        }       
 
         .aviso {
             background: white;
@@ -217,180 +217,239 @@
                 width: 100%;
             }
         }
-		
-		
-		
- 
-    /* Estilos corregidos para alineación perfecta */
+        
+        /* Estilos corregidos para alineación perfecta */
 
-    .filtro-perfecto * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-    
-    .filtro-perfecto {
-        margin: 1rem auto;
-        max-width: 500px;
-        font-family: system-ui, sans-serif;
-    }
-    
-    .filtro-group {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-    }
-    
-    .filtro-label {
-        font-size: 0.95rem;
-        color: #4b5563;
-        font-weight: 500;
-    }
-    
-    .filtro-controls {
-        display: flex;
-        align-items: stretch; /* Asegura misma altura */
-        height: 2.25rem; /* Altura fija */
-    }
-    
-    .filtro-date {
-        padding: 0.5rem;
-        border: 1px solid #d1d5db;
-        border-radius: 0.375rem 0 0 0.375rem;
-        font-size: 0.9rem;
-        height: 100%;
-    }
-    
-    .filtro-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.5rem;
-        background: none;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    
-    .filtro-submit {
-        color: #3b82f6;
-    }
-    
-    .filtro-submit:hover {
-        background-color: #eff6ff;
-    }
-    
-    .filtro-clear {
-        color: #ef4444;
-    }
-    
-    .filtro-clear:hover {
-        background-color: #fef2f2;
-    }
-    
-    .filtro-svg {
-        width: 1.1rem;
-        height: 1.1rem;
-    }
-    
-    @media (max-width: 640px) {
+        .filtro-perfecto * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .filtro-perfecto {
+            margin: 1rem auto;
+            max-width: 500px;
+            font-family: system-ui, sans-serif;
+        }
+        
         .filtro-group {
-            flex-direction: column;
-            align-items: stretch;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .filtro-label {
+            font-size: 0.95rem;
+            color: #4b5563;
+            font-weight: 500;
         }
         
         .filtro-controls {
-            width: 100%;
+            display: flex;
+            align-items: stretch; /* Asegura misma altura */
+            height: 2.25rem; /* Altura fija */
         }
         
         .filtro-date {
-            flex-grow: 1;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem 0 0 0.375rem;
+            font-size: 0.9rem;
+            height: 100%;
+        }
+        
+        .filtro-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            background: none;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         
         .filtro-submit {
-            border-radius: 0.375rem 0 0 0.375rem;
+            color: #3b82f6;
         }
+        
+        .filtro-submit:hover {
+            background-color: #eff6ff;
+        }
+        
+        .filtro-clear {
+            color: #ef4444;
+        }
+        
+        .filtro-clear:hover {
+            background-color: #fef2f2;
+        }
+        
+        .filtro-svg {
+            width: 1.1rem;
+            height: 1.1rem;
+        }
+        
+        @media (max-width: 640px) {
+            .filtro-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filtro-controls {
+                width: 100%;
+            }
+            
+            .filtro-date {
+                flex-grow: 1;
+            }
+            
+            .filtro-submit {
+                border-radius: 0.375rem 0 0 0.375rem;
+            }
+        }
+        
+        .filtro-title {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem 0 0 0.375rem;
+            font-size: 0.9rem;
+            height: 100%;
+        }
+        
+        .actualizacion {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }   
+
+        .autor {
+            text-align: center;
+            font-size: 0.95rem;
+            color: #4b5563;
+            margin-top: -20px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .autor a {
+            color: #1e40af;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .autor a:hover {
+            text-decoration: underline;
+        }
+.main-title a {
+    text-decoration: none; /* Quita el subrayado */
+    color: inherit; /* Hereda el color del h1 */
+}
+
+.main-title a:hover {
+    text-decoration: underline; /* Puedes añadirlo solo al hover si quieres */
+}		
+
+.filtros-container {
+    display: flex; /* Habilita Flexbox */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan si no hay espacio */
+    justify-content: center; /* Centra los filtros horizontalmente */
+    gap: 15px; /* Espacio entre los filtros */
+    margin-bottom: 20px; /* Espacio debajo de los filtros */
+}
+
+/* Opcional: Ajustar el ancho de cada filtro si el contenedor es ancho */
+.filtros-container .filtro-perfecto {
+    flex: 1 1 350px; /* Permite que crezca y se encoja, con un ancho base de 350px */
+    max-width: 48%; /* Para que dos quepan en una línea antes de envolverse */
+    /* Ajusta este max-width según tus necesidades y el diseño general */
+}
+
+@media (max-width: 768px) { /* Ajusta el breakpoint según tu diseño */
+    .filtros-container .filtro-perfecto {
+        max-width: 100%; /* En pantallas más pequeñas, que ocupen todo el ancho */
     }
-	
-.actualizacion {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    color: #666;
-    font-style: italic;
-}	
-
-.autor {
-    text-align: center;
-    font-size: 0.95rem;
-    color: #4b5563;
-    margin-top: -20px;
-    margin-bottom: 20px;
-    font-style: italic;
 }
-
-.autor a {
-    color: #1e40af;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.autor a:hover {
-    text-decoration: underline;
-}
-
-
     </style>
     <link rel="icon" type="image/x-icon" href="https://www.boletinoficial.gob.ar/favicon.ico" />
 </head>
 <body>
     <div class="container">
-        <h1>El Boletín Oficial resumido así nomás</h1>
+        <h1 class="main-title"><a href="/">El Boletín Oficial resumido así nomás</a></h1>
 
-<div class="autor">
-    by <a href="https://www.linkedin.com/in/nrmattar" target="_blank" rel="noopener noreferrer">Nahuel</a>
-</div>
+        <div class="autor">
+            by <a href="https://www.linkedin.com/in/nrmattar" target="_blank" rel="noopener noreferrer">Nahuel</a>
+        </div>
 
-      <div class="disclaimer">
+        <div class="disclaimer">
             Los avisos fueron extraídos del Boletín Oficial y resumidos con Modelos de IA. Puede haber errores.
         </div>
-		
-<div class="actualizacion">
-    Se muestra información a partir de: <b>{{ fecha_desde }}</b>. Fecha Última Actualización: <b>{{ fecha_actualizacion }}</b>
-</div>		
+        
+        <div class="actualizacion">
+            Se muestra información a partir de: <b>{{ fecha_desde }}</b>. Fecha Última Actualización: <b>{{ fecha_actualizacion }}</b>
+        </div>      
 
-<hr>
-		
-		<!-- Filtro por fecha - Agregado aquí -->
-<div class="filtro-perfecto">
-    <form action="/" method="GET" class="filtro-form">
-        <div class="filtro-group">
-            <span class="filtro-label">Filtrar por fecha:</span>
-            <div class="filtro-controls">
-                <input type="date" 
-                       id="fecha" 
-                       name="fecha" 
-                       class="filtro-date"
-                       value="{{ request.args.get('fecha', '') }}">
-                <button type="submit" class="filtro-btn filtro-submit" title="Aplicar filtro">
-                    <svg viewBox="0 0 20 20" fill="currentColor" class="filtro-svg">
-                        <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-                {% if request.args.get('fecha') %}
-                <a href="/" class="filtro-btn filtro-clear" title="Limpiar filtro">
-                    <svg viewBox="0 0 20 20" fill="currentColor" class="filtro-svg">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                    </svg>
-                </a>
-                {% endif %}
-            </div>
+        <hr>
+        <div class="filtros-container"> 
+        <div class="filtro-perfecto">
+            <form action="/" method="GET" class="filtro-form">
+                <div class="filtro-group">
+                    <span class="filtro-label">Filtrar por fecha:</span>
+                    <div class="filtro-controls">
+                        <input type="date" 
+                               id="fecha" 
+                               name="fecha" 
+                               class="filtro-date"
+                               value="{{ request.args.get('fecha', '') }}">
+                        <button type="submit" class="filtro-btn filtro-submit" title="Aplicar filtro">
+                            <svg viewBox="0 0 20 20" fill="currentColor" class="filtro-svg">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        {% if request.args.get('fecha') %}
+                        <a href="{{ url_for('index', titulo=request.args.get('titulo', '')) }}" class="filtro-btn filtro-clear" title="Limpiar filtro">
+                            <svg viewBox="0 0 20 20" fill="currentColor" class="filtro-svg">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
-        <!-- Fin del filtro por fecha -->
-		
+
+
+        <div class="filtro-perfecto">
+            <form action="/" method="GET" class="filtro-form">
+                <div class="filtro-group">
+                    <span class="filtro-label">Filtrar por título:</span>
+                    <div class="filtro-controls">
+                        <input type="text" 
+                               id="titulo" 
+                               name="titulo" 
+                               placeholder="Ej: HUMANO, decreto"
+                               class="filtro-title"
+                               value="{{ request.args.get('titulo', '') }}">
+                        <button type="submit" class="filtro-btn filtro-submit" title="Aplicar filtro">
+                            <svg viewBox="0 0 20 20" fill="currentColor" class="filtro-svg">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        {% if request.args.get('titulo') %}
+                        <a href="{{ url_for('index', fecha=request.args.get('fecha', '')) }}" class="filtro-btn filtro-clear" title="Limpiar filtro">
+                            <svg viewBox="0 0 20 20" fill="currentColor" class="filtro-svg">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+         </div>
         {% for aviso in avisos %}
             <div class="aviso">
                 <div class="titulo">
@@ -409,12 +468,15 @@
         {% endfor %}
 
         <div class="pagination">
+            {% set current_fecha = request.args.get('fecha', '') %}
+            {% set current_titulo = request.args.get('titulo', '') %}
+
             {% if pagina > 1 %}
-                <a href="{{ url_for('index', pagina=pagina - 1) }}">&laquo; Anterior</a>
+                <a href="{{ url_for('index', pagina=pagina - 1, fecha=current_fecha, titulo=current_titulo) }}">&laquo; Anterior</a>
             {% endif %}
             <span>Página {{ pagina }} de {{ total_paginas }}</span>
             {% if pagina < total_paginas %}
-                <a href="{{ url_for('index', pagina=pagina + 1) }}">Siguiente &raquo;</a>
+                <a href="{{ url_for('index', pagina=pagina + 1, fecha=current_fecha, titulo=current_titulo) }}">Siguiente &raquo;</a>
             {% endif %}
         </div>
 
@@ -426,7 +488,6 @@
         </div>
     </div>
 
-    <!-- Modal de Donación -->
     <div id="donateModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-message">
