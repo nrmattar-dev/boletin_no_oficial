@@ -11,15 +11,7 @@ app = Flask(__name__)
 AVISOS_POR_PAGINA = 50  # Cantidad de avisos por página
 
 def obtener_conexion():
-    user = os.getenv('POSTGRES_USER')
-    password = os.getenv('POSTGRES_PASSWORD')
-    host = os.getenv('POSTGRES_HOST')
-    port = os.getenv('POSTGRES_PORT', '5432')
-    dbname = os.getenv('POSTGRES_DATABASE')
-
-    # Armar la URL
-    connection_url = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
-
+    connection_url = os.getenv('POSTGRES_URL_NON_POOLING')
     # Conectar
     return psycopg2.connect(connection_url)
 
