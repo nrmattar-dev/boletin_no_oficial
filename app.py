@@ -21,6 +21,8 @@ def obtener_fechas():
     cursor.execute('SELECT MIN(FechaPublicacion), MAX(Timestamp) FROM avisos')
     fecha_desde, fecha_maxima = cursor.fetchone()
     conn.close()
+    if fecha_maxima:
+        fecha_maxima = fecha_maxima.strftime('%Y-%m-%d')
     return fecha_desde, fecha_maxima
 
 def convertir_negritas(texto):
