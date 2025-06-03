@@ -12,23 +12,14 @@ app = Flask(__name__)
 AVISOS_POR_PAGINA = 50  # Cantidad de avisos por página
 
 def obtener_conexion():
-    load_dotenv(encoding='utf-8')
-
-    DB_USER = os.getenv('DB_USER')
-    DB_PASS = os.getenv('DB_PASS')
-    DB_HOST = os.getenv('DB_HOST')
-    DB_PORT = os.getenv('DB_PORT')
-    DB_NAME = os.getenv('DB_NAME')
-
-    if not all([DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME]):
-        raise ValueError("Faltan variables de entorno para la conexión a la base de datos")
-
+    #load_dotenv()
     return psycopg2.connect(
-        host=DB_HOST,
-        dbname=DB_NAME,
-        user=DB_USER,
-        password=DB_PASS,
-        port=DB_PORT
+        host=os.getenv('POSTGRES_HOST'),
+        dbname=os.getenv('POSTGRES_DATABASE'),
+        user=os.getenv('POSTGRES_USER'),
+        password=os.getenv('POSTGRES_PASSWORD'),
+        port=os.getenv('POSTGRES_PORT', '5432'),
+        sslmode='require'
     )
 
 def obtener_fechas():
