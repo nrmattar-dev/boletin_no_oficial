@@ -8,7 +8,7 @@ import psycopg2
 
 app = Flask(__name__)
 
-AVISOS_POR_PAGINA = 50  # Cantidad de avisos por página
+AVISOS_POR_PAGINA = 25  # Cantidad de avisos por página
 
 def obtener_conexion():
     connection_url = os.getenv('POSTGRES_URL_NON_POOLING')
