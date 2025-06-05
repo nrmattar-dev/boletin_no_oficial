@@ -12,14 +12,7 @@
 
 <body>
     <div class="container">
-        <h1 class="main-title"><a href="/">Boletín NO Oficial</a></h1>
-        <div class="sub-title">
-            <h3>(La info del oficial, pero en criollo)</h3>
-        </div>
-
-        <div class="autor">
-            by <a href="https://www.linkedin.com/in/nrmattar" target="_blank" rel="noopener noreferrer">Nahuel</a>
-        </div>
+        {% include 'encabezado.html' %}
 
         <div class="aviso">
             <div class="titulo">
@@ -33,35 +26,16 @@
                 {{ aviso.TextoResumidoCorto | safe}}{{ aviso.TextoResumidoLargo | safe}}
             </div>
 
-            <!-- Botones de compartir -->
-            <div class="share-buttons">
-                <a href="https://api.whatsapp.com/send?text={{ aviso['Titulo'] | urlencode }}%0A%0A{{ request.url | urlencode }}"
-                    class="share-btn whatsapp" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-whatsapp"></i>WhatsApp
-                </a>
+            {% include 'compartir_y_copiar.html' %}
 
-                <a href="https://t.me/share/url?url={{ request.url | urlencode }}&text={{ aviso['Titulo'] | urlencode }}"
-                    class="share-btn telegram" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-telegram"></i>Telegram
-                </a>
-
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url | urlencode }}&quote={{ aviso['Titulo'] | urlencode }}"
-                    class="share-btn facebook" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-facebook"></i>Facebook
-                </a>
-
-                <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.url | urlencode }}&title={{ aviso['Titulo'] | urlencode }}&summary={{ aviso['TextoResumidoCorto'] | urlencode }}"
-                    class="share-btn linkedin" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-linkedin"></i>LinkedIn
-                </a>
-
-                <a href="https://twitter.com/intent/tweet?text={{ aviso['Titulo'] | urlencode }}%0A%0A{{ request.url | urlencode }}"
-                    class="share-btn X" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-twitter"></i>X
-                </a>
-            </div>
         </div>
+
+        {% include 'donar.html' %}
+        {% include 'ia_modal.html' %}
     </div>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
 </body>
 
 </html>

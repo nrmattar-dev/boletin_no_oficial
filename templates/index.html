@@ -13,18 +13,8 @@
 
 <body>
     <div class="container">
-        <h1 class="main-title"><a href="/">Boletín NO Oficial</a></h1>
-        <div class="sub-title">
-            <h3>(La info del oficial, pero en criollo)</h3>
-        </div>
 
-        <div class="autor">
-            by <a href="https://www.linkedin.com/in/nrmattar" target="_blank" rel="noopener noreferrer">Nahuel</a>
-        </div>
-
-        <div class="disclaimer">
-            Los avisos fueron extraídos del Boletín Oficial y resumidos con Modelos de IA. Puede haber errores.
-        </div>
+        {% include 'encabezado.html' %}
 
         <div class="actualizacion">
             Se muestra información a partir de: <b>{{ fecha_desde }}</b>. Fecha Última Actualización: <b>{{
@@ -113,37 +103,7 @@
             <button onclick="toggleTextoResumido({{ loop.index }})" id="btn-{{ loop.index }}">Mostrar más</button>
             {% endif %}
 
-            <!-- Botones de compartir -->
-            <div class="aviso-actions">
-  
-
-                <div class="share-buttons">
-                    <a href="https://api.whatsapp.com/send?text={{ aviso['Titulo'] | urlencode }}%0A%0A{{ aviso['TextoResumidoCorto'] | urlencode }}%0A%0A{{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
-                        class="share-btn whatsapp" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-whatsapp"></i>Whatsapp
-                    </a>
-                    <a href="https://t.me/share/url?text={{ aviso['Titulo'] | urlencode }}%0A%0A{{ aviso['TextoResumidoCorto'] | urlencode }}%0A%0A{{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
-                        class="share-btn telegram" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-telegram"></i>Telegram
-                    </a>
-                    <a href="https://www.facebook.com/sharer/sharer.php?quote={{ aviso['Titulo'] | urlencode }}%0A%0A{{ aviso['TextoResumidoCorto'] | urlencode }}%0A%0A{{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
-                        class="share-btn facebook" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-facebook"></i>Facebook
-                    </a>
-                    <a href="https://www.linkedin.com/shareArticle?mini=true&title={{ aviso['Titulo'] | urlencode }}&summary={{ aviso['TextoResumidoCorto'] | urlencode }}&url={{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
-                        class="share-btn linkedin" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-linkedin"></i>LinkedIn
-                    </a>
-                    <a href="https://X.com/intent/tweet?text={{ aviso['Titulo'] | urlencode }}%0A%0A{{ aviso['TextoResumidoCorto'] | urlencode }}%0A%0A{{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
-                        class="share-btn X" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-twitter"></i>X
-                    </a>
-                </div>
-
-                <button class="btn-copy-prompt" onclick="copyPromptAndText('{{ aviso['Texto'] | js_string }}')">
-                    ¡Quiero un resumen más completo!
-                </button>                
-            </div>
+            {% include 'compartir_y_copiar.html' %}
 
 
         </div>
@@ -164,148 +124,14 @@
                 {% endif %}
         </div>
 
-        <div class="donate-container">
-            <button class="donate-btn" onclick="showDonateModal()">
-                <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.18.9/mercadopago/logo__small@2x.png"
-                    alt="MercadoPago">
-                Donar
-            </button>
-        </div>
+        {% include 'donar.html' %}
+
     </div>
 
-    <div id="donateModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-message">
-                Transferí el monto que consideres a nrmattar.mp
-            </div>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-primary" onclick="donateNow()">
-                    Sí, de una
-                </button>
-                <button class="modal-btn modal-btn-secondary" onclick="hideDonateModal()">
-                    Más tarde
-                </button>
-            </div>
-        </div>
-    </div>
+    {% include 'ia_modal.html' %}
 
-    <div id="iaModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-message">
-                ¡Prompt + Texto copiado! Ahora podés ir a tu IA favorita, poné "Pegar" y dale enter ;)
-            </div>
-            <div class="modal-buttons ia-buttons">
-                <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="share-btn google">
-                    <i class="fab fa-google"></i> Gemini
-                </a>
-                <a href="https://chat.openai.com/" target="_blank" rel="noopener noreferrer" class="share-btn openai">
-                    <i class="fas fa-comment-dots"></i> ChatGPT </a>
-                <a href="https://deepseek.com/chat" target="_blank" rel="noopener noreferrer"
-                    class="share-btn deepseek">
-                    <i class="fas fa-brain"></i> Deepseek </a>
-                <a href="https://www.meta.ai/" target="_blank" rel="noopener noreferrer" class="share-btn meta">
-                    <i class="fab fa-facebook"></i> Meta AI
-                </a>
-                <a href="https://copilot.microsoft.com/" target="_blank" rel="noopener noreferrer"
-                    class="share-btn copilot">
-                    <i class="fab fa-microsoft"></i> Copilot
-                </a>
-                <button class="modal-btn modal-btn-secondary" onclick="hideIaModal()">
-                    Cerrar
-                </button>
-            </div>
-        </div>
-    </div>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
-    <script>
-        function toggleTextoResumido(i) {
-            const moreText = document.getElementById("more-" + i);
-            const dots = document.getElementById("dots-" + i);
-            const btnText = document.getElementById("btn-" + i);
-    
-            if (moreText.style.display === "none") {
-                moreText.style.display = "inline";
-                dots.style.display = "none";
-                btnText.textContent = "Mostrar menos";
-            } else {
-                moreText.style.display = "none";
-                dots.style.display = "inline";
-                btnText.textContent = "Mostrar más";
-            }
-        }
-    
-        // Funciones para el modal de donación
-        function showDonateModal() {
-            const modal = document.getElementById("donateModal");
-            modal.style.display = "flex";
-        }
-    
-        function hideDonateModal() {
-            const modal = document.getElementById("donateModal");
-            modal.style.display = "none";
-        }
-    
-        function donateNow() {
-            // Abre MercadoPago en nueva pestaña
-            window.open('https://www.mercadopago.com.ar/home', '_blank');
-            // Cierra el modal
-            hideDonateModal();
-        }
-    
-        // NUEVO: Funciones para el modal de IA
-        function showIaModal() {
-            const modal = document.getElementById("iaModal");
-            modal.style.display = "flex"; // Establece display a 'flex' para que se muestre y centre
-        }
-    
-        function hideIaModal() {
-            const modal = document.getElementById("iaModal");
-            modal.style.display = "none"; // Oculta el modal
-        }
-    
-        // Función para copiar el prompt y el texto
-        async function copyPromptAndText(originalText) {
-            // El prompt que se copiará
-            const prompt = "Resume el siguiente texto de forma clara, sencilla y pedagógica, como si se lo explicaras a alguien que no está familiarizado con el tema:\n\n";
-            const textToCopy = prompt + originalText;
-    
-            let copiedSuccessfully = false;
-    
-            // Intento 1: Usar la API Clipboard moderna (promesa)
-            try {
-                await navigator.clipboard.writeText(textToCopy);
-                console.log('Copiado con navigator.clipboard.writeText');
-                copiedSuccessfully = true;
-            } catch (err) {
-                console.error('Error al copiar con navigator.clipboard.writeText:', err);
-    
-                // Intento 2: Usar la API antigua (document.execCommand) como fallback
-                try {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = textToCopy;
-                    textarea.style.position = 'fixed'; // Para que no interfiera con el layout
-                    textarea.style.top = 0;
-                    textarea.style.left = 0;
-                    textarea.style.opacity = 0; // Hacemos el textarea invisible
-                    document.body.appendChild(textarea);
-                    textarea.focus();
-                    textarea.select();
-                    document.execCommand('copy'); // Ejecuta el comando de copia
-                    document.body.removeChild(textarea); // Elimina el textarea
-                    console.log('Copiado con document.execCommand("copy")');
-                    copiedSuccessfully = true;
-                } catch (err2) {
-                    console.error('Error al copiar con document.execCommand("copy"):', err2);
-                    // Si ambos fallan, mostramos el mensaje de error al usuario
-                    alert('Hubo un error al copiar el texto. Por favor, intenta copiarlo manualmente.');
-                }
-            }
-    
-            if (copiedSuccessfully) {
-                showIaModal(); // Muestra el nuevo modal de IA si se copió correctamente
-            }
-        }
-    </script>
 </body>
 
 </html>
