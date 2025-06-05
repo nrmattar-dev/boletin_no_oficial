@@ -9,7 +9,7 @@ import json
 
 app = Flask(__name__)
 
-AVISOS_POR_PAGINA = 25  # Cantidad de avisos por página
+AVISOS_POR_PAGINA = 10  # Cantidad de avisos por página
 
 @app.template_filter('js_string')
 def js_string_filter(s):
@@ -24,7 +24,7 @@ def bloquear_user_agents():
     ua = request.headers.get('User-Agent', '').lower()
     if any(palabra in ua for palabra in SUSPECT_UA):
         abort(403)
-        
+
 def obtener_conexion():
     connection_url = os.getenv('POSTGRES_URL_NON_POOLING')
     # Conectar
