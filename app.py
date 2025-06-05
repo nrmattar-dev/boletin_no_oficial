@@ -5,10 +5,17 @@ from markupsafe import Markup
 from datetime import datetime
 import os
 import psycopg2
+import json
 
 app = Flask(__name__)
 
 AVISOS_POR_PAGINA = 25  # Cantidad de avisos por página
+
+@app.template_filter('js_string')
+def js_string_filter(s):
+    """Escapa una cadena para usarla de forma segura en JavaScript."""
+    # Esto convierte cualquier cosa a texto y luego la hace segura para JavaScript
+    return json.dumps(str(s))
 
 def obtener_conexion():
     connection_url = os.getenv('POSTGRES_URL_NON_POOLING')
@@ -79,6 +86,32 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None,titulo_filtro=None):
 
     total_paginas = math.ceil(total_avisos / AVISOS_POR_PAGINA) if AVISOS_POR_PAGINA > 0 else 1
     return avisos, total_paginas
+
+@app.route('/aviso/<int:id>')
+def mostrar_aviso(id):
+    conn = obtener_conexion()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT Id, Titulo, Texto, TextoResumido, Enlace, FechaPublicacion, Modelo, Timestamp
+        FROM avisos
+        WHERE Id = %s
+    ''', (id,))
+    row = cursor.fetchone()
+    conn.close()
+
+    if not row:
+        return "Aviso no encontrado", 404
+
+    columnas = ['Id', 'Titulo', 'Texto', 'TextoResumido', 'Enlace', 'FechaPublicacion', 'Modelo', 'Timestamp']
+    aviso = dict(zip(columnas, row))
+
+    texto_a_usar = aviso['TextoResumido'] or f"RESUMEN AÚN NO GENERADO. TEXTO COMPLETO: {aviso['Texto']}"
+    corto, largo = cortar_texto(texto_a_usar)
+    aviso['TextoResumidoCorto'] = convertir_negritas(corto)
+    aviso['TextoResumidoLargo'] = convertir_negritas(largo)
+
+    return render_template('aviso.html', aviso=aviso)
+
 
 @app.route('/')
 @app.route('/<int:pagina>')
