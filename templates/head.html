@@ -1,9 +1,50 @@
 <head>
+    <!-- Metadatos básicos -->
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Boletín NO Oficial</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- SEO: descripción y palabras clave -->
+    <meta name="description" content="Boletín NO Oficial - La info del oficial, pero en criollo." />
+    <meta name="keywords" content="boletín, oficial, decretos, resoluciones, avisos, anuncios, gobierno" />
+    <meta name="author" content="Boletín NO Oficial" />
+
+    <!-- Canonical (evita contenido duplicado para buscadores) -->
+    <link rel="canonical" href="{{ request.url }}" />
+
+    <!-- Favicon e íconos -->
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/Boletin_NO_Oficial.ico', _external=True) }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/Boletin_NO_Oficial.jpg', _external=True) }}">
+
+    <!-- Estilos y fuentes -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha384-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Open Graph (Facebook, LinkedIn, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Boletín NO Oficial" />
+    <meta property="og:description" content="Noticias, opiniones y análisis sin filtros." />
+    <meta property="og:url" content="{{ request.url }}" />
+    <meta property="og:site_name" content="Boletín NO Oficial" />
     <meta property="og:image" content="{{ url_for('static', filename='img/Boletin_NO_Oficial.jpg', _external=True) }}" />
+    <meta property="og:image:alt" content="Logotipo del Boletín NO Oficial" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Boletín NO Oficial" />
+    <meta name="twitter:description" content="Noticias, opiniones y análisis sin filtros." />
+    <meta name="twitter:image" content="{{ url_for('static', filename='img/Boletin_NO_Oficial.jpg', _external=True) }}" />
+    <meta name="twitter:image:alt" content="Logotipo del Boletín NO Oficial" />
+    <meta name="twitter:site" content="@BoletinNoOficial" />
+    <meta name="twitter:creator" content="@BoletinNoOficial" />
+
+    <!-- Seguridad (recomendaciones básicas) -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <!-- Accesibilidad -->
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Otros para rastreadores -->
+    <meta name="robots" content="index, follow" />
 </head>
