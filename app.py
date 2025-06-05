@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, abort
 import math
 import re
 from markupsafe import Markup
@@ -17,6 +17,14 @@ def js_string_filter(s):
     # Esto convierte cualquier cosa a texto y luego la hace segura para JavaScript
     return json.dumps(str(s))
 
+SUSPECT_UA = ["python", "curl", "httpclient", "wget", "scrapy", "bot", "spider"]
+
+@app.before_request
+def bloquear_user_agents():
+    ua = request.headers.get('User-Agent', '').lower()
+    if any(palabra in ua for palabra in SUSPECT_UA):
+        abort(403)
+        
 def obtener_conexion():
     connection_url = os.getenv('POSTGRES_URL_NON_POOLING')
     # Conectar
