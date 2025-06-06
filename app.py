@@ -26,7 +26,8 @@ def bloquear_user_agents():
         abort(403)
 
 def obtener_conexion():
-    connection_url = os.getenv('POSTGRES_URL_NON_POOLING')
+    #connection_url = os.getenv('POSTGRES_URL_NON_POOLING')
+    connection_url = os.getenv('POSTGRES_URL_LOCAL')
     # Conectar
     return psycopg2.connect(connection_url)
 
@@ -57,7 +58,7 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None,titulo_filtro=None):
     cursor = conn.cursor()
 
     base_query = '''
-        SELECT Id, Titulo, Texto, TextoResumido, Enlace, FechaPublicacion, Modelo, Timestamp
+        SELECT Id, Titulo, Categoria, Texto, TextoResumido, Enlace, FechaPublicacion, Modelo, Timestamp
         FROM avisos
     '''
     count_query = 'SELECT COUNT(*) FROM avisos'
@@ -83,13 +84,13 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None,titulo_filtro=None):
     cursor.execute(count_query + where_clause, params)
     total_avisos = cursor.fetchone()[0]
 
-    full_query = base_query + where_clause + ' ORDER BY FechaPublicacion DESC, Id LIMIT %s OFFSET %s'
+    full_query = base_query + where_clause + ' ORDER BY FechaPublicacion DESC, Categoria, Id LIMIT %s OFFSET %s'
     cursor.execute(full_query, params + [AVISOS_POR_PAGINA, offset])
     rows = cursor.fetchall()
     conn.close()
 
     # Mapeo manual para que se parezca a sqlite3.Row
-    columnas = ['Id', 'Titulo', 'Texto', 'TextoResumido', 'Enlace', 'FechaPublicacion', 'Modelo', 'Timestamp']
+    columnas = ['Id', 'Titulo', 'Categoria', 'Texto', 'TextoResumido', 'Enlace', 'FechaPublicacion', 'Modelo', 'Timestamp']
     avisos = [dict(zip(columnas, row)) for row in rows]
 
     total_paginas = math.ceil(total_avisos / AVISOS_POR_PAGINA) if AVISOS_POR_PAGINA > 0 else 1
@@ -100,7 +101,7 @@ def mostrar_aviso(id):
     conn = obtener_conexion()
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT Id, Titulo, Texto, TextoResumido, Enlace, FechaPublicacion, Modelo, Timestamp
+        SELECT Id, Titulo, Categoria, Texto, TextoResumido, Enlace, FechaPublicacion, Modelo, Timestamp
         FROM avisos
         WHERE Id = %s
     ''', (id,))
@@ -110,7 +111,7 @@ def mostrar_aviso(id):
     if not row:
         return "Aviso no encontrado", 404
 
-    columnas = ['Id', 'Titulo', 'Texto', 'TextoResumido', 'Enlace', 'FechaPublicacion', 'Modelo', 'Timestamp']
+    columnas = ['Id', 'Titulo', 'Categoria', 'Texto', 'TextoResumido', 'Enlace', 'FechaPublicacion', 'Modelo', 'Timestamp']
     aviso = dict(zip(columnas, row))
 
     texto_a_usar = aviso['TextoResumido'] or f"RESUMEN AÚN NO GENERADO. TEXTO COMPLETO: {aviso['Texto']}"

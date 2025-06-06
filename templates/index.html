@@ -8,34 +8,46 @@
 
         {% include 'macros/encabezado.html' %}
 
-
         {% include 'macros/filtros.html' %}
         
-
+        {# Primero agrupamos los avisos por categoría #}
+        {% set avisos_por_categoria = {} %}
         {% for aviso in avisos %}
-        <div class="aviso">
-            <div class="titulo">
-                <a href="{{ aviso['Enlace'] }}" target="_blank">
-                    {{ aviso['Titulo'] }}{% if '?anexo' in aviso['Enlace'] %} (ANEXO){% endif %}
-                  </a>
-
-            </div>
-
-            <div class="fecha">
-                Publicado el {{ aviso['FechaPublicacion'] }} (Modelo utilizado: {{ aviso['Modelo'] }})
-            </div>
-            <div class="TextoResumido" id="TextoResumido-{{ loop.index }}">
-                {{ aviso['TextoResumidoCorto'] }}{% if aviso['TextoResumidoLargo'] %}<span id="more-{{ loop.index }}"
-                    style="display:none;">{{ aviso['TextoResumidoLargo'] }}</span><span
-                    id="dots-{{ loop.index }}">...</span>{% endif %}
-            </div>
-            {% if aviso['TextoResumidoLargo'] %}
-            <button onclick="toggleTextoResumido({{ loop.index }})" id="btn-{{ loop.index }}">Mostrar más</button>
+            {% if aviso['Categoria'] not in avisos_por_categoria %}
+                {% set _ = avisos_por_categoria.update({aviso['Categoria']: []}) %}
             {% endif %}
+            {% set _ = avisos_por_categoria[aviso['Categoria']].append(aviso) %}
+        {% endfor %}
 
-            {% include 'macros/compartir_y_copiar.html' %}
+        {# Luego iteramos por cada categoría #}
+        {% for categoria, avisos_categoria in avisos_por_categoria.items() %}
+        <div class="categoria-grupo">
+            <h2 class="categoria-titulo">{{ categoria }}</h2>
+            
+            {# Iteramos los avisos de esta categoría #}
+            {% for aviso in avisos_categoria %}
+            <div class="aviso">
+                <div class="titulo">
+                    <a href="{{ aviso['Enlace'] }}" target="_blank">
+                        {{ aviso['Titulo'] }}{% if '?anexo' in aviso['Enlace'] %} (ANEXO){% endif %}
+                    </a>
+                </div>
 
+                <div class="fecha">
+                    Publicado el {{ aviso['FechaPublicacion'] }} (Modelo utilizado: {{ aviso['Modelo'] }})
+                </div>
+                <div class="TextoResumido" id="TextoResumido-{{ loop.index }}">
+                    {{ aviso['TextoResumidoCorto'] }}{% if aviso['TextoResumidoLargo'] %}<span id="more-{{ loop.index }}"
+                        style="display:none;">{{ aviso['TextoResumidoLargo'] }}</span><span
+                        id="dots-{{ loop.index }}">...</span>{% endif %}
+                </div>
+                {% if aviso['TextoResumidoLargo'] %}
+                <button onclick="toggleTextoResumido({{ loop.index }})" id="btn-{{ loop.index }}">Mostrar más</button>
+                {% endif %}
 
+                {% include 'macros/compartir_y_copiar.html' %}
+            </div>
+            {% endfor %}
         </div>
         {% endfor %}
 
@@ -63,5 +75,4 @@
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
 </body>
-
 </html>
