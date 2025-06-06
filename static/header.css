@@ -182,14 +182,14 @@
 
 @media (max-width: 480px) {
     .titulo-link {
-        font-size: 1.8rem;
+        /*font-size: 1.8rem;*/
         letter-spacing: 1px;
     }
-    
+    /*
     .subtitulo span:not(.bandera-argentina) {
         display: none;
     }
-    
+    */
     .subtitulo .bandera-argentina {
         font-size: 1.4rem;
     }
