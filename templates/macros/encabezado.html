@@ -14,9 +14,10 @@
                 <span class="mate-icon">🧉</span> Nahuel
             </a>
         </div>
+        {% if request.endpoint == 'index' %}
         <div class="subtitulo actualizacion">
-            Info desde: <b>{{ fecha_desde | trim}}.</b> Hasta: <b>{{
-                fecha_actualizacion | trim }}.</b>
-        </div>        
+            Info desde: <b>{{ fecha_desde | trim }}.</b> Hasta: <b>{{ fecha_actualizacion | trim }}.</b>
+        </div>
+    {% endif %}      
     </div>
 </header>
