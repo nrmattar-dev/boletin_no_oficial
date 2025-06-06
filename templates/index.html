@@ -15,7 +15,9 @@
         {% for aviso in avisos %}
         <div class="aviso">
             <div class="titulo">
-                <a href="{{ aviso['Enlace'] }}" target="_blank">{{ aviso['Titulo'] }}</a>
+                <a href="{{ aviso['Enlace'] }}" target="_blank">
+                    {{ aviso['Titulo'] }}{% if '?anexo' in aviso['Enlace'] %} (ANEXO){% endif %}
+                  </a>
 
             </div>
 
