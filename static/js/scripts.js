@@ -23,8 +23,32 @@ function hideDonateModal() {
 }
 
 function donateNow() {
-    window.open('https://www.mercadopago.com.ar/home', '_blank');
+    // Primero ocultamos el modal
     hideDonateModal();
+    
+    // URL para desktop (abre en nueva pestaña)
+    const desktopUrl = 'https://www.mercadopago.com.ar/home';
+    
+    // URL para mobile (intenta abrir la app)
+    const mobileUrl = 'mercadopago://';
+    
+    // Detección de dispositivo móvil
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        // Intentamos abrir la app
+        window.location.href = mobileUrl;
+        
+        // Si la app no está instalada, redirigimos a la web después de un tiempo
+        setTimeout(function() {
+            if (!document.hidden) {
+                window.open(desktopUrl, '_blank');
+            }
+        }, 500);
+    } else {
+        // Para desktop, abrimos directamente en nueva pestaña
+        window.open(desktopUrl, '_blank');
+    }
 }
 
 function showIaModal() {
@@ -34,10 +58,7 @@ function showIaModal() {
 function hideIaModal() {
     document.getElementById("iaModal").style.display = "none";
 }
-
-async function copyPromptAndText(originalText) {
-    const prompt = "Resume el siguiente texto de forma clara, sencilla y pedagógica, como si se lo explicaras a alguien que no está familiarizado con el tema:\n\n";
-    const textToCopy = prompt + originalText;
+async function copyText(textToCopy) { 
     let copiedSuccessfully = false;
 
     try {
@@ -63,6 +84,41 @@ async function copyPromptAndText(originalText) {
     }
 
     if (copiedSuccessfully) {
+        // Crear el elemento del mensaje
+        const toast = document.createElement('div');
+        toast.textContent = '¡Copiado!';
+        toast.style.position = 'fixed';
+        toast.style.bottom = '20px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        toast.style.color = 'white';
+        toast.style.padding = '8px 16px';
+        toast.style.borderRadius = '4px';
+        toast.style.zIndex = '1000';
+        toast.style.transition = 'opacity 0.5s';
+        
+        // Añadir al documento
+        document.body.appendChild(toast);
+        
+        // Hacer que desaparezca después de 1.5 segundos
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 500);
+        }, 1500);
+    }
+
+    return copiedSuccessfully;
+}
+
+async function copyPrompt(text) {
+    const prompt = "Resume el siguiente texto de forma clara, sencilla y pedagógica, como si se lo explicaras a alguien que no está familiarizado con el tema:\n\n";
+    const textToCopy = prompt + text;
+    const copiedSuccessfully = await copyText(textToCopy);
+    if (copiedSuccessfully) {
         showIaModal();
     }
 }
+
