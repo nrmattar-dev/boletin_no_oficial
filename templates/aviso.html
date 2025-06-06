@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 
-{% include 'head.html' %}
+{% include 'macros/head.html' %}
 
 <body>
     <div class="container">
-        {% include 'encabezado.html' %}
+        {% include 'macros/encabezado.html' %}
 
         <div class="aviso">
             <div class="titulo">
@@ -19,12 +19,12 @@
                 {{ aviso.TextoResumidoCorto | safe}}{{ aviso.TextoResumidoLargo | safe}}
             </div>
 
-            {% include 'compartir_y_copiar.html' %}
+            {% include 'macros/compartir_y_copiar.html' %}
 
         </div>
 
-        {% include 'donar.html' %}
-        {% include 'ia_modal.html' %}
+        {% include 'macros/donar.html' %}
+        {% include 'macros/ia_modal.html' %}
     </div>
 
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>

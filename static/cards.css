@@ -1,0 +1,96 @@
+/* Aviso Card Styles */
+.aviso {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.titulo a {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e40af;
+    text-decoration: none;
+}
+
+.titulo a:hover {
+    text-decoration: underline;
+}
+
+.fecha {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 8px;
+    margin-bottom: 15px;
+}
+
+.TextoResumido {
+    line-height: 1.5;
+    text-align: justify;
+    margin-bottom: 10px;
+}
+
+/* Action Buttons within Aviso */
+.aviso-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.btn-copy-prompt {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+    margin-top: 0px;
+    font-size: 0.85rem;
+}
+
+.btn-copy-prompt:hover {
+    background-color: #0056b3;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.share-btn:hover {
+    text-decoration: none;
+    opacity: 0.9;
+}
+
+.share-btn i {
+    margin-right: 4px;
+    font-size: 0.9rem;
+}
+
+/* Social Media Colors */
+.whatsapp { background-color: #25D366; }
+.telegram { background-color: #0088CC; }
+.facebook { background-color: #1877F2; }
+.linkedin { background-color: #0A66C2; }
+.X { background-color: #000000; }

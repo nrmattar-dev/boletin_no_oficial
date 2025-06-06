@@ -7,19 +7,29 @@
 
     <!-- SEO: descripción y palabras clave -->
     <meta name="description" content="Boletín NO Oficial - La info del oficial, pero en criollo." />
-    <meta name="keywords" content="boletín, oficial, decretos, resoluciones, avisos, anuncios, gobierno, resumen, criollo" />
+    <meta name="keywords"
+        content="boletín, oficial, decretos, resoluciones, avisos, anuncios, gobierno, resumen, criollo" />
     <meta name="author" content="Boletín NO Oficial" />
 
     <!-- Canonical (evita contenido duplicado para buscadores) -->
     <link rel="canonical" href="{{ request.url }}" />
 
     <!-- Favicon e íconos -->
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/Boletin_NO_Oficial.ico', _external=True) }}" />
+    <link rel="icon" type="image/x-icon"
+        href="{{ url_for('static', filename='img/Boletin_NO_Oficial.ico', _external=True) }}" />
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}">
 
     <!-- Estilos y fuentes -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha384-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='filters.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='cards.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='modals.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='responsive.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha384-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Open Graph (Facebook, LinkedIn, etc.) -->
     <meta property="og:type" content="website" />
@@ -27,14 +37,16 @@
     <meta property="og:description" content="La info del oficial, pero en criollo." />
     <meta property="og:url" content="{{ request.url }}" />
     <meta property="og:site_name" content="Boletín NO Oficial" />
-    <meta property="og:image" content="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}" />
+    <meta property="og:image"
+        content="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}" />
     <meta property="og:image:alt" content="Logotipo del Boletín NO Oficial" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Boletín NO Oficial" />
     <meta name="twitter:description" content="La info del oficial, pero en criollo." />
-    <meta name="twitter:image" content="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}" />
+    <meta name="twitter:image"
+        content="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}" />
     <meta name="twitter:image:alt" content="Logotipo del Boletín NO Oficial" />
     <meta name="twitter:site" content="@BoletinNoOficial" />
     <meta name="twitter:creator" content="@BoletinNoOficial" />
