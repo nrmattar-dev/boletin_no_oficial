@@ -53,15 +53,16 @@
 
         <div class="pagination">
             {% set current_fecha = request.args.get('fecha', '') %}
-            {% set current_titulo = request.args.get('titulo', '') %}
+            {% set current_categoria = request.args.get('categoria', '') %}
+            {% set current_texto = request.args.get('texto', '') %}
 
             {% if pagina > 1 %}
-            <a href="{{ url_for('index', pagina=pagina - 1, fecha=current_fecha, titulo=current_titulo) }}">&laquo;
+            <a href="{{ url_for('index', pagina=pagina - 1, fecha=current_fecha, categoria=current_categoria, texto=current_texto) }}">&laquo;
                 Anterior</a>
             {% endif %}
             <span>Página {{ pagina }} de {{ total_paginas }}</span>
             {% if pagina < total_paginas %} <a
-                href="{{ url_for('index', pagina=pagina + 1, fecha=current_fecha, titulo=current_titulo) }}">Siguiente
+                href="{{ url_for('index', pagina=pagina + 1, fecha=current_fecha, categoria=current_categoria, texto=current_texto) }}">Siguiente
                 &raquo;</a>
                 {% endif %}
         </div>

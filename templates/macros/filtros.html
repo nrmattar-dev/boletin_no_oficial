@@ -1,13 +1,21 @@
 <div class="filtros-container">
     <form action="/" method="GET" class="filtro-form">
         <div class="filtro-group">
+            
             <span class="filtro-label">Fecha:</span>
             <input type="date" id="fecha" name="fecha" class="filtro-date"
-                value="{{ request.args.get('fecha', '') }}">
+                value="{{ request.args.get('fecha', '') }}">            
             
-            <span class="filtro-label">Título:</span>
-            <input type="text" id="titulo" name="titulo" placeholder="Ej: HUMANO, decreto"
-                class="filtro-title" value="{{ request.args.get('titulo', '') }}">
+            <span class="filtro-label">Texto:</span>
+            <input type="text" id="texto" name="texto" placeholder="Ej: HUMANO, decreto"
+                class="filtro-text" value="{{ request.args.get('texto', '') }}">
+
+            <span class="filtro-label">Categoría:</span>
+            <div class="categoria-wrapper">
+                <input type="text" id="categoria" name="categoria" placeholder="Filtrar por categoría"
+                    class="filtro-category" value="{{ request.args.get('categoria', '') }}" autocomplete="off">
+                <div id="sugerencias" class="dropdown-sugerencias"></div>
+            </div>
             
             <button type="submit" class="filtro-btn filtro-submit" title="Aplicar filtro">
                 <svg viewBox="0 0 20 20" fill="currentColor" class="filtro-svg">
@@ -17,7 +25,7 @@
                 </svg>
             </button>
             
-            {% if request.args.get('fecha') or request.args.get('titulo') %}
+            {% if request.args.get('fecha') or request.args.get('categoria') or request.args.get('texto') %}
             <a href="{{ url_for('index') }}" class="filtro-btn filtro-clear" title="Limpiar filtro">
                 <svg viewBox="0 0 20 20" fill="currentColor" class="filtro-svg">
                     <path fill-rule="evenodd"

@@ -24,16 +24,22 @@
 }
 
 .filtro-date,
-.filtro-title {
+.filtro-category,
+.filtro-text {
     padding: 0.5rem;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
     font-size: 0.9rem;
     height: 2.25rem;
-    min-width: 150px;
+    /*min-width: 150px;*/
 }
 
-.filtro-title::placeholder {
+.filtro-date {width: 8rem}
+.filtro-category {width: 9rem}
+.filtro-text  {width: 8rem}
+
+.filtro-text::placeholder,
+.filtro-category::placeholder {
     color: #9ca3af;
 }
 
@@ -87,7 +93,8 @@
 
     .filtro-label,
     .filtro-date,
-    .filtro-title,
+    .filtro-text,
+    .filtro-category,
     .filtro-btn {
         width: 100%;
         box-sizing: border-box; /* ← Asegura que el padding no rompa el ancho */
@@ -103,6 +110,33 @@
     }
 }
 
+/*** CATEGORIAS ****/
+
+.dropdown-sugerencias {
+    display: none; /* oculto por defecto */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    width: 17rem; 
+}
+.categoria-wrapper {
+    position: relative;
+    width: fit-content;
+}
+.opcion-sugerencia {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.opcion-sugerencia:hover {
+    background-color: #f0f0f0;
+}
 
 /*
 .filtros-container {

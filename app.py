@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, jsonify
 import math
 import re
 from markupsafe import Markup
@@ -31,6 +31,27 @@ def obtener_conexion():
     # Conectar
     return psycopg2.connect(connection_url)
 
+@app.route('/categorias')
+def categorias():
+    q = request.args.get('q', '')
+    if not q or len(q) < 2:
+        return jsonify([])
+
+    conn = obtener_conexion()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT DISTINCT categoria
+        FROM avisos
+        WHERE UPPER(categoria) LIKE UPPER(%s)
+        ORDER BY categoria
+        LIMIT 20
+    """, (f"%{q}%",))
+    
+    resultados = [row[0] for row in cur.fetchall()]
+    cur.close()
+    conn.close()
+    return jsonify(resultados)
+
 def obtener_fechas():
     conn = obtener_conexion()
     cursor = conn.cursor()
@@ -52,7 +73,7 @@ def cortar_texto(texto, limite=500):
     resto = texto[len(corte):]
     return corte, resto
 
-def obtener_avisos_paginado(pagina, fecha_filtro=None,titulo_filtro=None):
+def obtener_avisos_paginado(pagina, fecha_filtro=None,categoria_filtro=None,texto_filtro=None):
     offset = (pagina - 1) * AVISOS_POR_PAGINA
     conn = obtener_conexion()
     cursor = conn.cursor()
@@ -71,11 +92,16 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None,titulo_filtro=None):
         conditions.append("DATE(FechaPublicacion) = %s")
         params.append(fecha_filtro)
 
-    if titulo_filtro:
-        palabras = [p.strip().upper() for p in titulo_filtro.split(',') if p.strip()]
+    if texto_filtro:
+        palabras = [p.strip().upper() for p in texto_filtro.split(',') if p.strip()]
         for palabra in palabras:
-            conditions.append("UPPER(Titulo) LIKE %s")
+            conditions.append("UPPER(Titulo) LIKE UPPER(%s)or UPPER(TextoResumido) LIKE UPPER(%s)")
             params.append(f'%{palabra}%')
+            params.append(f'%{palabra}%')
+
+    if categoria_filtro:
+        conditions.append("UPPER(Categoria) LIKE %s")
+        params.append(f'%{categoria_filtro}%')        
 
     # Construct the final where_clause
     if conditions:
@@ -126,8 +152,9 @@ def mostrar_aviso(id):
 @app.route('/<int:pagina>')
 def index(pagina=1):
     fecha_filtro = request.args.get('fecha')
-    titulo_filtro = request.args.get('titulo')
-    avisos_pagina, total_paginas = obtener_avisos_paginado(pagina, fecha_filtro, titulo_filtro)
+    texto_filtro = request.args.get('texto')
+    categoria_filtro = request.args.get('categoria')
+    avisos_pagina, total_paginas = obtener_avisos_paginado(pagina, fecha_filtro, categoria_filtro, texto_filtro)
     avisos_final = []
 
     for aviso in avisos_pagina:

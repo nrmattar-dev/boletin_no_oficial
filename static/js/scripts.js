@@ -25,22 +25,22 @@ function hideDonateModal() {
 function donateNow() {
     // Primero ocultamos el modal
     hideDonateModal();
-    
+
     // URL para desktop (abre en nueva pestaña)
     const desktopUrl = 'https://www.mercadopago.com.ar/home';
-    
+
     // URL para mobile (intenta abrir la app)
     const mobileUrl = 'mercadopago://';
-    
+
     // Detección de dispositivo móvil
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
+
     if (isMobile) {
         // Intentamos abrir la app
         window.location.href = mobileUrl;
-        
+
         // Si la app no está instalada, redirigimos a la web después de un tiempo
-        setTimeout(function() {
+        setTimeout(function () {
             if (!document.hidden) {
                 window.open(desktopUrl, '_blank');
             }
@@ -58,7 +58,7 @@ function showIaModal() {
 function hideIaModal() {
     document.getElementById("iaModal").style.display = "none";
 }
-async function copyText(textToCopy) { 
+async function copyText(textToCopy) {
     let copiedSuccessfully = false;
 
     try {
@@ -97,10 +97,10 @@ async function copyText(textToCopy) {
         toast.style.borderRadius = '4px';
         toast.style.zIndex = '1000';
         toast.style.transition = 'opacity 0.5s';
-        
+
         // Añadir al documento
         document.body.appendChild(toast);
-        
+
         // Hacer que desaparezca después de 1.5 segundos
         setTimeout(() => {
             toast.style.opacity = '0';
@@ -122,3 +122,54 @@ async function copyPrompt(text) {
     }
 }
 
+/***** CATEGORIAS *******/
+
+document.addEventListener('click', function (event) {
+    const input = document.getElementById('categoria');
+    const sugerencias = document.getElementById('sugerencias');
+
+    // Si el click fue fuera del input y fuera del dropdown
+    if (!input.contains(event.target) && !sugerencias.contains(event.target)) {
+        sugerencias.innerHTML = '';
+        sugerencias.style.display = 'none';
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('categoria');
+    const sugerencias = document.getElementById('sugerencias');
+
+    input.addEventListener('input', function () {
+        const query = input.value.trim();
+
+        if (query.length < 2) {
+            sugerencias.innerHTML = '';
+            return;
+        }
+
+        fetch(`/categorias?q=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                sugerencias.innerHTML = '';
+                if (data.length === 0) {
+                    sugerencias.style.display = 'none';
+                    return;
+                }
+
+                data.forEach(cat => {
+                    const div = document.createElement('div');
+                    div.textContent = cat;
+                    div.classList.add('opcion-sugerencia');
+                    div.addEventListener('click', () => {
+                        input.value = cat;
+                        sugerencias.innerHTML = '';
+                        sugerencias.style.display = 'none';
+                    });
+                    sugerencias.appendChild(div);
+                });
+
+                sugerencias.style.display = 'block';
+            });
+
+    });
+});
