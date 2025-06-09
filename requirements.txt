@@ -2,3 +2,5 @@ Flask
 python-dotenv
 psycopg2-binary
 MarkupSafe
+flask_caching
+functools
