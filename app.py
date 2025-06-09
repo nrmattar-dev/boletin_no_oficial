@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, abort, jsonify
+from flask_caching import Cache
+from functools import lru_cache
 import math
 import re
 from markupsafe import Markup
@@ -52,6 +54,7 @@ def categorias():
     conn.close()
     return jsonify(resultados)
 
+@lru_cache(maxsize=1)
 def obtener_fechas():
     conn = obtener_conexion()
     cursor = conn.cursor()
@@ -59,7 +62,7 @@ def obtener_fechas():
     fecha_desde, fecha_maxima = cursor.fetchone()
     conn.close()
     if fecha_maxima:
-        fecha_maxima = fecha_maxima.strftime('%Y-%m-%d') 
+        fecha_maxima = fecha_maxima.strftime('%Y-%m-%d')
     return fecha_desde, fecha_maxima
 
 def convertir_negritas(texto):
@@ -147,9 +150,11 @@ def mostrar_aviso(id):
 
     return render_template('aviso.html', aviso=aviso)
 
+cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 60})
 
 @app.route('/')
 @app.route('/<int:pagina>')
+@cache.cached(timeout=60, query_string=True)
 def index(pagina=1):
     fecha_filtro = request.args.get('fecha')
     texto_filtro = request.args.get('texto')

@@ -28,8 +28,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='modals.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='responsive.css') }}">
 
+    <!--
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        integrity="sha384-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+        integrity="sha384-..." crossorigin="anonymous" referrerpolicy="no-referrer" />-->
+    <!-- Font Awesome optimizado -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    </noscript>
 
     <!-- Open Graph (Facebook, LinkedIn, etc.) -->
     <meta property="og:type" content="website" />
@@ -56,6 +63,17 @@
 
     <!-- Accesibilidad -->
     <meta name="theme-color" content="#000000" />
+
+    <!-- Optimización de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500&family=Secular+One&display=swap"
+        onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500&family=Secular+One&display=swap">
+    </noscript>
 
     <!-- Otros para rastreadores -->
     <meta name="robots" content="index, follow" />
