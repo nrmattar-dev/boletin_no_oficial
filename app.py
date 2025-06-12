@@ -62,7 +62,7 @@ def obtener_fechas():
     fecha_desde, fecha_maxima = cursor.fetchone()
     conn.close()
     if fecha_maxima:
-        fecha_maxima = fecha_maxima.strftime('%Y-%m-%d')
+        fecha_maxima = fecha_maxima.strftime('%Y-%m-%dT%H:%M:%SZ')
     return fecha_desde, fecha_maxima
 
 def convertir_negritas(texto):

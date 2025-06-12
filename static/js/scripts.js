@@ -173,3 +173,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.timestamp-utc').forEach(el => {
+      const utcStr = el.getAttribute('data-utc');
+      if (utcStr) {
+        const dateObj = new Date(utcStr);
+        if (!isNaN(dateObj)) {
+          el.innerText = dateObj.toLocaleDateString('es-AR').trim();
+        } else {
+          el.innerText = 'Fecha inválida';
+        }
+      }
+    });
+  });
+  
