@@ -98,7 +98,7 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None,categoria_filtro=None,text
     if texto_filtro:
         palabras = [p.strip().upper() for p in texto_filtro.split(',') if p.strip()]
         for palabra in palabras:
-            conditions.append("UPPER(Titulo) LIKE UPPER(%s)or UPPER(TextoResumido) LIKE UPPER(%s)")
+            conditions.append("(UPPER(Titulo) LIKE UPPER(%s) OR UPPER(TextoResumido) LIKE UPPER(%s))")
             params.append(f'%{palabra}%')
             params.append(f'%{palabra}%')
 
@@ -114,6 +114,7 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None,categoria_filtro=None,text
     total_avisos = cursor.fetchone()[0]
 
     full_query = base_query + where_clause + ' ORDER BY FechaPublicacion DESC, Categoria, Id LIMIT %s OFFSET %s'
+
     cursor.execute(full_query, params + [AVISOS_POR_PAGINA, offset])
     rows = cursor.fetchall()
     conn.close()
@@ -156,7 +157,16 @@ cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT':
 @app.route('/<int:pagina>')
 @cache.cached(timeout=60, query_string=True)
 def index(pagina=1):
-    fecha_filtro = request.args.get('fecha')
+    #fecha_filtro = request.args.get('fecha')
+    fecha_filtro_str = request.args.get('fecha')
+    fecha_filtro = None
+    if fecha_filtro_str:
+        try:
+            fecha_filtro = datetime.strptime(fecha_filtro_str, "%Y-%m-%d").date()
+        except ValueError:
+            print(f"Fecha inválida: {fecha_filtro_str}")
+
+
     texto_filtro = request.args.get('texto')
     categoria_filtro = request.args.get('categoria')
     avisos_pagina, total_paginas = obtener_avisos_paginado(pagina, fecha_filtro, categoria_filtro, texto_filtro)
