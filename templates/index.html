@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="fecha">
-                    Publicado el <span class="timestamp-utc" data-utc="{{ aviso['FechaPublicacion'] }}">Cargando...</span> (Modelo IA utilizado: {{ aviso['Modelo'] }})
+                    Publicado el <span class="dd-mm-yyyy" data-utc="{{ aviso['FechaPublicacion'] }}">Cargando...</span> (Modelo IA utilizado: {{ aviso['Modelo'] }})
                 </div>
                 <div class="TextoResumido" id="TextoResumido-{{ loop.index }}">
                     {{ aviso['TextoResumidoCorto'] }}{% if aviso['TextoResumidoLargo'] %}<span id="more-{{ loop.index }}"

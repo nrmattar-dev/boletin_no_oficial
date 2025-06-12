@@ -174,17 +174,32 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.timestamp-utc').forEach(el => {
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.dd-mm-yyyy').forEach(el => {
       const utcStr = el.getAttribute('data-utc');
       if (utcStr) {
-        const dateObj = new Date(utcStr);
-        if (!isNaN(dateObj)) {
-          el.innerText = dateObj.toLocaleDateString('es-AR').trim();
+        // Extrae solo la parte de la fecha (YYYY-MM-DD)
+        const match = utcStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (match) {
+          const [, year, month, day] = match;
+          el.innerText = `${day}/${month}/${year}`;
         } else {
-          el.innerText = 'Fecha inválida';
+          el.innerText = 'Formato inválido';
         }
       }
     });
+
+    document.querySelectorAll('.timestamp-utc').forEach(el => {
+        const utcStr = el.getAttribute('data-utc');
+        if (utcStr) {
+          const dateObj = new Date(utcStr);
+          if (!isNaN(dateObj)) {
+            el.innerText = dateObj.toLocaleDateString('utc').trim();//dateObj.toLocaleDateString('es-AR').trim();
+          } else {
+            el.innerText = 'Fecha inválida';
+          }
+        }
+      });    
   });
-  
