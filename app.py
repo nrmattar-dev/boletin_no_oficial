@@ -188,10 +188,19 @@ def resumen_diario():
     #with open("debug.txt", "w", encoding="utf-8") as f:
     #    f.write(repr(resultado[0]))
     resumen_formateado = formatear_resumen(resultado[0])
+
+    def limpiar_html_para_texto_plano(html):
+        texto = re.sub(r'<[^>]+>', '', html)  # Elimina todas las etiquetas HTML
+        texto = re.sub(r'\s+', ' ', texto).strip()  # Limpia espacios múltiples
+        return texto
+
+    resumen_plano = limpiar_html_para_texto_plano(resumen_formateado)
+
     resumen_final = resumen_formateado
 
     return render_template('resumendiario.html',
         resumen_diario=Markup(resumen_final),
+        resumen_plano=resumen_plano,
         fecha_actual=fecha.strftime("%Y-%m-%d"),
         fecha_actualizacion=resultado[1].strftime('%Y-%m-%dT%H:%M:%SZ') if resultado[1] else datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
         modelo=resultado[2] if resultado[2] else "No especificado"

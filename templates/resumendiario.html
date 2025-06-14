@@ -24,7 +24,7 @@
             <button type="button" onclick="cambiarFecha(1)" class="fecha-btn">&rarr;</button>
             
         </form>
-                
+
         {% include 'macros/disclaimer.html' %}
         <!-- FORMULARIO FUNCIONAL -->
 
@@ -52,11 +52,11 @@
 
                 <!-- Botones compartir -->
                 <div class="share-buttons-resumen">
-                    <a href="https://api.whatsapp.com/send?text=Resumen%20del%20d%C3%ADa%20{{ fecha_actual }}%0A%0A{{ resumen_diario | truncate(100) | urlencode }}%0A%0A{{ url_for('resumen_diario', fecha=fecha_actual, _external=True) | urlencode }}"
+                    <a href="https://api.whatsapp.com/send?text=Resumen%20del%20d%C3%ADa%20{{ fecha_actual }}%0A%0A{{ resumen_plano | truncate(100) | urlencode }}%0A%0A{{ url_for('resumen_diario', fecha=fecha_actual, _external=True) | urlencode }}"
                         class="share-btn whatsapp" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-whatsapp"></i>Whatsapp
                     </a>
-                    <a href="https://t.me/share/url?text=Resumen%20del%20d%C3%ADa%20{{ fecha_actual }}%0A%0A{{ resumen_diario | truncate(100) | urlencode }}%0A%0A{{ url_for('resumen_diario', fecha=fecha_actual, _external=True) | urlencode }}"
+                    <a href="https://t.me/share/url?text=Resumen%20del%20d%C3%ADa%20{{ fecha_actual }}%0A%0A{{ resumen_plano | truncate(100) | urlencode }}%0A%0A{{ url_for('resumen_diario', fecha=fecha_actual, _external=True) | urlencode }}"
                         class="share-btn telegram" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-telegram"></i>Telegram
                     </a>
@@ -68,7 +68,7 @@
                         class="share-btn linkedin" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-linkedin"></i>LinkedIn
                     </a>
-                    <a href="https://X.com/intent/tweet?text=Resumen%20del%20d%C3%ADa%20{{ fecha_actual }}%0A%0A{{ resumen_diario | truncate(100) | urlencode }}%0A%0A{{ url_for('resumen_diario', fecha=fecha_actual, _external=True) | urlencode }}"
+                    <a href="https://X.com/intent/tweet?text=Resumen%20del%20d%C3%ADa%20{{ fecha_actual }}%0A%0A{{ resumen_plano | truncate(100) | urlencode }}%0A%0A{{ url_for('resumen_diario', fecha=fecha_actual, _external=True) | urlencode }}"
                         class="share-btn X" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-twitter"></i>X
                     </a>
