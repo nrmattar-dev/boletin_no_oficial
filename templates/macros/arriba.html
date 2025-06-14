@@ -1,0 +1,50 @@
+<!-- Botón "Volver arriba" -->
+<button id="btn-volver-arriba" title="Volver arriba">
+    ↑
+</button>
+
+<style>
+    #btn-volver-arriba {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        display: none;
+        transition: opacity 0.3s, transform 0.3s;
+    }
+
+    #btn-volver-arriba:hover {
+        background-color: #0056b3;
+        transform: scale(1.1);
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnVolverArriba = document.getElementById("btn-volver-arriba");
+
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) {
+                btnVolverArriba.style.display = "block";
+            } else {
+                btnVolverArriba.style.display = "none";
+            }
+        });
+
+        btnVolverArriba.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    });
+</script>

@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
-
+<head>
 {% include 'macros/head.html' %}
-
+</head>
 <body>
     <div class="container">
 
         {% include 'macros/encabezado.html' %}
 
-        {% include 'macros/filtros.html' %}
-        
+
+        {% include 'macros/filtros.html' %}       
+
         <div class="resumen-diario-container">
             <button onclick="mostrarResumenDiario()" class="btn-resumen-diario">¡Ver el resumen del día!</button>
         </div>
-                
+      
         {# Primero agrupamos los avisos por categoría #}
         {% set avisos_por_categoria = {} %}
         {% for aviso in avisos %}
@@ -70,7 +71,7 @@
                 &raquo;</a>
                 {% endif %}
         </div>
-
+        {% include 'macros/arriba.html' %}
         {% include 'macros/donar.html' %}
 
     </div>

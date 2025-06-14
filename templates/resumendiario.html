@@ -1,28 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-
+<head>
 {% include 'macros/head.html' %}
-
+<link rel="stylesheet" href="{{ url_for('static', filename='rd_styles.css') }}">
+</head>
 <body>
     <div class="container">
         {% include 'macros/encabezado.html' %}
 
         <!-- FORMULARIO FUNCIONAL -->
-        <form method="get" action="{{ url_for('resumen_diario') }}" class="filtro-fecha-resumen">
-            <button type="button" onclick="cambiarFecha(-1)" class="fecha-btn">&larr;</button>
 
-            <input type="date" id="fechaResumen" name="fecha" value="{{ fecha_actual }}">
-
-            <button type="submit" class="filtro-btn filtro-submit" title="Aplicar filtro">
-                <svg viewBox="0 0 20 20" fill="currentColor" class="filtro-svg">
-                    <path fill-rule="evenodd"
-                        d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                        clip-rule="evenodd" />
-                </svg><!-- ícono del filtro -->
-            </button>
-
-            <button type="button" onclick="cambiarFecha(1)" class="fecha-btn">&rarr;</button>
-        </form>
 
         <div class="aviso">
             <div class="encabezado-resumen">
@@ -35,18 +22,15 @@
                     Generado el <span class="dd-mm-yyyy" data-utc="{{ fecha_actualizacion }}">Cargando...</span>
                     (Modelo IA utilizado: {{ modelo }})
                     {% else %}
-                    Sin información para el <span class="dd-mm-yyyy" data-utc="{{ request.args.get('fecha') }}">Cargando...</span>                    
+                    Fijate otro día porque el <span class="dd-mm-yyyy" data-utc="{{ request.args.get('fecha') }}">Cargando...</span> no tiene info.                   
                     {% endif %}
                 </div>
             </div>
 
             <div class="TextoResumido">
-                {% for item in resumen_diario.split('<div class="resumen-item">') %}
-                    {% if item %}
-                    <div class="resumen-item">{{ item | safe }}</div>
-                    {% endif %}
-                    {% endfor %}
-                </div>
+              
+                    {{ resumen_diario | safe }}
+                
 
                 <!-- Botones compartir -->
                 <div class="share-buttons-resumen">
@@ -74,6 +58,23 @@
             </div>
         </div>
 
+        <form method="get" action="{{ url_for('resumen_diario') }}" class="filtro-fecha-resumen">
+            <button type="button" onclick="cambiarFecha(-1)" class="fecha-btn">&larr;</button>
+
+            <input type="date" id="fechaResumen" name="fecha" value="{{ fecha_actual }}">
+
+            <button type="submit" class="filtro-btn filtro-submit" title="Aplicar filtro">
+                <svg viewBox="0 0 20 20" fill="currentColor" class="filtro-svg">
+                    <path fill-rule="evenodd"
+                        d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+                        clip-rule="evenodd" />
+                </svg><!-- ícono del filtro -->
+            </button>
+
+            <button type="button" onclick="cambiarFecha(1)" class="fecha-btn">&rarr;</button>
+            {% include 'macros/arriba.html' %}
+        </form>
+                
         {% include 'macros/donar.html' %}
 
         <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>

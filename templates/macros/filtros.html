@@ -1,3 +1,7 @@
+<div id="contenedor-filtros">
+    <button id="toggle-filtros" onclick="toggleFiltros()">Mostrar filtros 🔍</button>
+    <div id="filtros-wrapper">
+
 <div class="filtros-container">
     <form action="/" method="GET" class="filtro-form">
         <div class="filtro-group">
@@ -37,3 +41,54 @@
         </div>
     </form>
 </div>
+
+</div>
+</div>
+
+<style>
+    #toggle-filtros {
+        display: none;
+        margin: 0 auto;
+        padding: 0.6rem 1rem;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        width: fit-content;
+        text-decoration: auto;
+    }
+    
+    #filtros-wrapper {
+        display: block;
+    }
+    
+    /* En móviles, ocultamos los filtros por defecto */
+    @media (max-width: 768px) {
+        #toggle-filtros {
+            display: block;
+        }
+    
+        #filtros-wrapper {
+            display: none;
+            margin-top: 0.5rem;
+            padding: 0.5rem 0;
+            border-top: 1px solid #ddd;
+        }
+    
+        #filtros-wrapper.mostrar {
+            display: block;
+        }
+    }
+    </style>
+
+<script>
+    function toggleFiltros() {
+        const filtros = document.getElementById('filtros-wrapper');
+        const btn = document.getElementById('toggle-filtros');
+        const visible = filtros.classList.toggle('mostrar');
+    
+        btn.textContent = visible ? 'Ocultar filtros ✖️' : 'Mostrar filtros 🔍';
+    }
+    </script>

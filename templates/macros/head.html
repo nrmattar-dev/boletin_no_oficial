@@ -1,835 +1,848 @@
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Boletín NO Oficial</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Boletín NO Oficial</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="description" content="Boletín NO Oficial - La info del oficial, pero en criollo." />
-    <meta name="keywords"
-        content="boletín, oficial, decretos, resoluciones, avisos, anuncios, gobierno, resumen, criollo" />
-    <meta name="author" content="Boletín NO Oficial" />
+<meta name="description" content="Boletín NO Oficial - La info del oficial, pero en criollo." />
+<meta name="keywords"
+    content="boletín, oficial, decretos, resoluciones, avisos, anuncios, gobierno, resumen, criollo" />
+<meta name="author" content="Boletín NO Oficial" />
 
-    <link rel="canonical" href="{{ request.url }}" />
+<link rel="canonical" href="{{ request.url }}" />
 
-    <link rel="icon" type="image/x-icon"
-        href="{{ url_for('static', filename='img/Boletin_NO_Oficial.ico', _external=True) }}" />
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}">
+<link rel="icon" type="image/x-icon"
+    href="{{ url_for('static', filename='img/Boletin_NO_Oficial.ico', _external=True) }}" />
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #eff7fb;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        position: relative;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        font-size: 1rem;
+    }
+
+    .pagination a {
+        text-decoration: none;
+        color: #1e40af;
+        font-weight: 500;
+    }
+
+    .pagination a:hover {
+        text-decoration: underline;
+    }
+
+    .donate-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        padding-bottom: 30px;
+    }
+
+    .donate-btn {
+        background-color: #009ee3;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .donate-btn:hover {
+        background-color: #007eb5;
+    }
+
+    .donate-btn img {
+        height: 20px;
+    }
+
+    button {
+        background: none;
+        border: none;
+        color: #1e40af;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 0;
+    }
+
+    button:hover {
+        text-decoration: underline;
+    }
+
+    :root {
+        --celeste: #5AA9E6;
+        --celeste-oscuro: #1E6FBA;
+        --blanco: #F8F9FA;
+        --dorado: #FFC300;
+        --negro: #212529;
+        --sombra: rgba(0, 0, 0, 0.2);
+    }
+
+    .header-argentino {
+        background: linear-gradient(160deg, var(--celeste), var(--celeste-oscuro));
+        padding: 1.8rem 1rem 1.2rem;
+        text-align: center;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px var(--sombra);
+        position: relative;
+        overflow: hidden;
+        margin: 0.8rem auto 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .header-argentino::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .header-content {
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
+
+    .titulo-principal {
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+    }
+
+    .titulo-link {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 400;
+        color: var(--blanco);
+        text-decoration: none;
+        letter-spacing: 2px;
+        display: inline-block;
+        position: relative;
+        text-shadow: 2px 2px 3px var(--negro);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        padding: 0 5px;
+    }
+
+    .titulo-link:hover {
+        transform: scale(1.03);
+        color: var(--dorado);
+        text-shadow: 0 0 8px rgba(255, 195, 0, 0.6);
+    }
+
+    .subtitulo {
+        font-family: 'Oswald', sans-serif;
+        font-size: 1rem;
+        color: var(--blanco);
+        margin: 0.5rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        opacity: 1;
+    }
+
+    .actualizacion {
+        font-size: 0.8rem;
+        font-weight: 200;
+    }
+
+    .bandera-argentina {
+        font-size: 1.1rem;
+        animation: wave 2.5s infinite ease-in-out;
+    }
+
+    .autor-container {
+        margin-top: 0.8rem;
+        margin-bottom: 0.8rem;
+        font-family: 'Secular One', sans-serif;
+        font-size: 0.85rem;
+    }
+
+    .by {
+        color: var(--blanco);
+        opacity: 0.7;
+        margin-right: 4px;
+    }
+
+    .autor-link {
+        color: var(--blanco);
+        font-weight: 400;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 0.2rem 0.6rem;
+        background-color: rgba(0, 0, 0, 0.15);
+        border-radius: 15px;
+        transition: all 0.3s;
+        letter-spacing: 0.3px;
+    }
+
+    .autor-link:hover {
+        background-color: rgba(0, 0, 0, 0.3);
+        color: var(--dorado);
+    }
+
+    .mate-icon {
+        font-size: 1rem;
+    }
+
+    @keyframes wave {
+
+        0%,
+        100% {
+            transform: translateY(0);
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #eff7fb;
-            color: #333;
-            line-height: 1.6;
+        50% {
+            transform: translateY(-3px);
         }
+    }
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-            position: relative;
-        }
+    .header-argentino::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+    }
 
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            font-size: 1rem;
-        }
-
-        .pagination a {
-            text-decoration: none;
-            color: #1e40af;
-            font-weight: 500;
-        }
-
-        .pagination a:hover {
-            text-decoration: underline;
-        }
-
-        .donate-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            padding-bottom: 30px;
-        }
-
-        .donate-btn {
-            background-color: #009ee3;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .donate-btn:hover {
-            background-color: #007eb5;
-        }
-
-        .donate-btn img {
-            height: 20px;
-        }
-
-        button {
-            background: none;
-            border: none;
-            color: #1e40af;
-            cursor: pointer;
-            font-size: 0.9rem;
-            padding: 0;
-        }
-
-        button:hover {
-            text-decoration: underline;
-        }
-
-        :root {
-            --celeste: #5AA9E6;
-            --celeste-oscuro: #1E6FBA;
-            --blanco: #F8F9FA;
-            --dorado: #FFC300;
-            --negro: #212529;
-            --sombra: rgba(0, 0, 0, 0.2);
-        }
-
+    @media (max-width: 768px) {
         .header-argentino {
-            background: linear-gradient(160deg, var(--celeste), var(--celeste-oscuro));
-            padding: 1.8rem 1rem 1.2rem;
-            text-align: center;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px var(--sombra);
-            position: relative;
-            overflow: hidden;
-            margin: 0.8rem auto 0.8rem;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .header-argentino::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .header-content {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        .titulo-principal {
-            margin: 0;
-            padding: 0;
-            line-height: 1;
+            padding: 1.5rem 1rem 1rem;
+            margin: 0.5rem auto 1rem;
+            border-radius: 12px;
         }
 
         .titulo-link {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 400;
-            color: var(--blanco);
-            text-decoration: none;
-            letter-spacing: 2px;
-            display: inline-block;
-            position: relative;
-            text-shadow: 2px 2px 3px var(--negro);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            padding: 0 5px;
-        }
-
-        .titulo-link:hover {
-            transform: scale(1.03);
-            color: var(--dorado);
-            text-shadow: 0 0 8px rgba(255, 195, 0, 0.6);
+            font-size: 2rem;
         }
 
         .subtitulo {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1rem;
-            color: var(--blanco);
-            margin: 0.5rem 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            opacity: 1;
-        }
-
-        .actualizacion {
-            font-size: 0.8rem;
-            font-weight: 200;
-        }
-
-        .bandera-argentina {
-            font-size: 1.1rem;
-            animation: wave 2.5s infinite ease-in-out;
+            font-size: 0.9rem;
+            gap: 6px;
         }
 
         .autor-container {
-            margin-top: 0.8rem;
-            margin-bottom: 0.8rem;
-            font-family: 'Secular One', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .titulo-link {
+            letter-spacing: 1px;
         }
 
-        .by {
-            color: var(--blanco);
-            opacity: 0.7;
-            margin-right: 4px;
+        .subtitulo .bandera-argentina {
+            font-size: 1.4rem;
         }
+    }
 
-        .autor-link {
-            color: var(--blanco);
-            font-weight: 400;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 0.2rem 0.6rem;
-            background-color: rgba(0, 0, 0, 0.15);
-            border-radius: 15px;
-            transition: all 0.3s;
-            letter-spacing: 0.3px;
-        }
+    .filtros-container {
+        font-family: system-ui, sans-serif;
+    }
 
-        .autor-link:hover {
-            background-color: rgba(0, 0, 0, 0.3);
-            color: var(--dorado);
-        }
+    .filtro-form {
+        display: flex;
+        justify-content: center;
+    }
 
-        .mate-icon {
-            font-size: 1rem;
-        }
+    .filtro-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
 
-        @keyframes wave {
+    .filtro-label {
+        font-size: 0.95rem;
+        color: #4b5563;
+        font-weight: 500;
+        white-space: nowrap;
+    }
 
-            0%,
-            100% {
-                transform: translateY(0);
-            }
+    .filtro-date,
+    .filtro-category,
+    .filtro-text {
+        padding: 0.5rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        font-size: 0.9rem;
+        height: 2.25rem;
+    }
 
-            50% {
-                transform: translateY(-3px);
-            }
-        }
+    .filtro-date {
+        width: 8rem;
+    }
 
-        .header-argentino::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            pointer-events: none;
-        }
+    .filtro-category {
+        width: 9rem;
+    }
 
-        @media (max-width: 768px) {
-            .header-argentino {
-                padding: 1.5rem 1rem 1rem;
-                margin: 0.5rem auto 1rem;
-                border-radius: 12px;
-            }
+    .filtro-text {
+        width: 8rem;
+    }
 
-            .titulo-link {
-                font-size: 2rem;
-            }
+    .filtro-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.25rem;
+        background: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+    }
 
-            .subtitulo {
-                font-size: 0.9rem;
-                gap: 6px;
-            }
+    .filtro-submit {
+        color: #3b82f6;
+    }
 
-            .autor-container {
-                font-size: 0.8rem;
-            }
-        }
+    .filtro-submit:hover {
+        background-color: #eff6ff;
+    }
 
-        @media (max-width: 480px) {
-            .titulo-link {
-                letter-spacing: 1px;
-            }
+    .filtro-svg {
+        width: 1.1rem;
+        height: 1.1rem;
+    }
 
-            .subtitulo .bandera-argentina {
-                font-size: 1.4rem;
-            }
-        }
+    .dropdown-sugerencias {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        border: 1px solid #ccc;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        width: 17rem;
+    }
 
-        .filtros-container {
-            margin-bottom: 10px;
-            font-family: system-ui, sans-serif;
-        }
+    .categoria-wrapper {
+        position: relative;
+        width: fit-content;
+    }
 
+    @media (max-width: 640px) {
         .filtro-form {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
         }
 
         .filtro-group {
             display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            flex-wrap: wrap;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .filtro-label,
+        .filtro-date,
+        .filtro-text,
+        .filtro-category,
+        .categoria-wrapper,
+        .dropdown-sugerencias,
+        .filtro-btn {
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .filtro-label {
-            font-size: 0.95rem;
-            color: #4b5563;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        .filtro-date,
-        .filtro-category,
-        .filtro-text {
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            font-size: 0.9rem;
-            height: 2.25rem;
-        }
-
-        .filtro-date {
-            width: 8rem;
-        }
-
-        .filtro-category {
-            width: 9rem;
-        }
-
-        .filtro-text {
-            width: 8rem;
+            text-align: left;
+            margin-bottom: 0.25rem;
         }
 
         .filtro-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.25rem;
-            background: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
+            margin-top: 0.5rem;
+        }
+    }
+
+    .aviso {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+    .titulo a {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1e40af;
+        text-decoration: none;
+    }
+
+    .titulo a:hover {
+        text-decoration: underline;
+    }
+
+    .fecha {
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 8px;
+        margin-bottom: 15px;
+    }
+
+    .TextoResumido {
+        line-height: 1.5;
+        text-align: justify;
+        margin-bottom: 10px;
+    }
+
+    .aviso-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .btn-copy-prompt {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        white-space: nowrap;
+        margin-top: 0px;
+        font-size: 0.85rem;
+    }
+
+    .btn-copy-prompt:hover {
+        background-color: #0056b3;
+    }
+
+    .share-buttons {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .share-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 10px;
+        border-radius: 4px;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+
+    .share-btn:hover {
+        text-decoration: none;
+        opacity: 0.9;
+    }
+
+    .share-btn i {
+        margin-right: 4px;
+        font-size: 0.9rem;
+    }
+
+    .whatsapp {
+        background-color: #4CAF50;
+    }
+
+    .telegram {
+        background-color: #0088CC;
+    }
+
+    .facebook {
+        background-color: #1877F2;
+    }
+
+    .linkedin {
+        background-color: #0A66C2;
+    }
+
+    .X {
+        background-color: #000000;
+    }
+
+    .categoria-grupo {
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .categoria-titulo {
+        color: #333;
+        padding: 0.5rem 0;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #007bff;
+        font-size: 1.5rem;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        padding: 20px;
+    }
+
+    .disclaimer {
+        font-size: 0.7rem;
+        text-align: center;
+        margin-bottom: 1em;
+        color: #9a3412;
+        background-color: #fff7ed;
+        border: 1px solid #fed7aa;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .modal-content {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        transform: translateY(0);
+        transition: transform 0.3s ease-out;
+    }
+
+    .modal-message {
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+        line-height: 1.5;
+        color: #333;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .modal-btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s;
+    }
+
+    .modal-btn-primary {
+        background-color: #009ee3;
+        color: white;
+    }
+
+    .modal-btn-primary:hover {
+        background-color: #007eb5;
+    }
+
+    .modal-btn-secondary {
+        background-color: #e0e0e0;
+        color: #333;
+    }
+
+    .modal-btn-secondary:hover {
+        background-color: #cccccc;
+    }
+
+    .ia-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .ia-buttons a.share-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        width: 100%;
+        max-width: 200px;
+        transition: opacity 0.3s ease, transform 0.2s ease;
+        font-weight: bold;
+    }
+
+    .ia-buttons a.share-btn i {
+        margin-right: 8px;
+        font-size: 1.1em;
+    }
+
+    .ia-buttons a.share-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+
+    .ia-buttons a.google {
+        background-color: #4285F4;
+    }
+
+    .ia-buttons a.openai {
+        background-color: #10A37F;
+    }
+
+    .ia-buttons a.deepseek {
+        background-color: #333333;
+    }
+
+    .ia-buttons a.meta {
+        background-color: #1877F2;
+    }
+
+    .ia-buttons a.copilot {
+        background-color: #0078D4;
+    }
+
+    #iaModal .modal-buttons .modal-btn-secondary {
+        margin-top: 15px;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .copyable-text {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .copyable-text:hover {
+        background-color: #e0e0e0;
+    }
+
+    .copy-icon {
+        opacity: 0.7;
+        transition: opacity 0.2s ease;
+    }
+
+    .copyable-text:hover .copy-icon {
+        opacity: 1;
+    }
+
+    .btn-resumen-diario {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 10px 0;
+        width: 100%;
+        transition: background-color 0.3s;
+    }
+
+    .btn-resumen-diario:hover {
+        background-color: #45a049;
+    }
+
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        .filtro-group {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.5rem;
+        }
+
+
+        .filtro-date {
+            border-radius: 0.375rem 0 0 0.375rem;
         }
 
         .filtro-submit {
-            color: #3b82f6;
-        }
-
-        .filtro-submit:hover {
-            background-color: #eff6ff;
-        }
-
-        .filtro-svg {
-            width: 1.1rem;
-            height: 1.1rem;
-        }
-
-        .dropdown-sugerencias {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: white;
-            border: 1px solid #ccc;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-            width: 17rem;
-        }
-
-        .categoria-wrapper {
-            position: relative;
-            width: fit-content;
-        }
-
-        @media (max-width: 640px) {
-            .filtro-form {
-                display: flex;
-                flex-direction: column;
-                align-items: stretch;
-                width: 100%;
-            }
-
-            .filtro-group {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .filtro-label,
-            .filtro-date,
-            .filtro-text,
-            .filtro-category,
-            .categoria-wrapper,
-            .dropdown-sugerencias,
-            .filtro-btn {
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            .filtro-label {
-                text-align: left;
-                margin-bottom: 0.25rem;
-            }
-
-            .filtro-btn {
-                margin-top: 0.5rem;
-            }
+            border-radius: 0 0.375rem 0.375rem 0;
         }
 
         .aviso {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-            padding: 20px;
-            margin-bottom: 25px;
+            padding: 15px;
         }
 
         .titulo a {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #1e40af;
-            text-decoration: none;
-        }
-
-        .titulo a:hover {
-            text-decoration: underline;
-        }
-
-        .fecha {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 8px;
-            margin-bottom: 15px;
-        }
-
-        .TextoResumido {
-            line-height: 1.5;
-            text-align: justify;
-            margin-bottom: 10px;
+            font-size: 1.1rem;
         }
 
         .aviso-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .btn-copy-prompt {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            white-space: nowrap;
-            margin-top: 0px;
-            font-size: 0.85rem;
-        }
-
-        .btn-copy-prompt:hover {
-            background-color: #0056b3;
-        }
-
-        .share-buttons {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .share-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6px 10px;
-            border-radius: 4px;
-            color: white;
-            font-size: 0.8rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }
-
-        .share-btn:hover {
-            text-decoration: none;
-            opacity: 0.9;
-        }
-
-        .share-btn i {
-            margin-right: 4px;
-            font-size: 0.9rem;
-        }
-
-        .whatsapp {
-            background-color: #4CAF50;
-        }
-
-        .telegram {
-            background-color: #0088CC;
-        }
-
-        .facebook {
-            background-color: #1877F2;
-        }
-
-        .linkedin {
-            background-color: #0A66C2;
-        }
-
-        .X {
-            background-color: #000000;
-        }
-
-        .categoria-grupo {
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .categoria-titulo {
-            color: #333;
-            padding: 0.5rem 0;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #007bff;
-            font-size: 1.5rem;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .disclaimer {
-            font-size: 0.9rem;
-            text-align: center;
-            margin-bottom: 20px;
-            color: #9a3412;
-            background-color: #fff7ed;
-            border: 1px solid #fed7aa;
-            padding: 10px;
-            border-radius: 8px;
-        }        
-
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            transform: translateY(0);
-            transition: transform 0.3s ease-out;
-        }
-
-        .modal-message {
-            margin-bottom: 25px;
-            font-size: 1.1rem;
-            line-height: 1.5;
-            color: #333;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: flex-start;
             gap: 15px;
         }
 
-        .modal-btn {
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s;
+        .btn-copy-prompt {
+            width: 100%;
+            text-align: center;
         }
 
-        .modal-btn-primary {
-            background-color: #009ee3;
-            color: white;
-        }
-
-        .modal-btn-primary:hover {
-            background-color: #007eb5;
-        }
-
-        .modal-btn-secondary {
-            background-color: #e0e0e0;
-            color: #333;
-        }
-
-        .modal-btn-secondary:hover {
-            background-color: #cccccc;
-        }
-
-        .ia-buttons {
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .ia-buttons a.share-btn {
-            display: flex;
-            align-items: center;
+        .share-buttons {
+            width: 100%;
             justify-content: center;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
+            gap: 8px;
+        }
+
+        .share-btn {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+
+        .share-btn i {
+            margin-right: 6px;
+        }
+
+        .modal-content {
+            padding: 20px;
+            max-width: 95%;
+        }
+
+        .modal-message {
+            font-size: 1rem;
+        }
+
+        .modal-buttons {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-btn {
             width: 100%;
-            max-width: 200px;
-            transition: opacity 0.3s ease, transform 0.2s ease;
-            font-weight: bold;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1.6rem;
         }
 
-        .ia-buttons a.share-btn i {
-            margin-right: 8px;
-            font-size: 1.1em;
+        .actualizacion {
+            font-size: 0.8rem;
         }
 
-        .ia-buttons a.share-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+        .share-btn {
+            padding: 7px 10px;
+            font-size: 0.75rem;
         }
 
-        .ia-buttons a.google {
-            background-color: #4285F4;
+        .share-btn i {
+            font-size: 0.85rem;
         }
 
-        .ia-buttons a.openai {
-            background-color: #10A37F;
+        .btn-copy-prompt {
+            font-size: 0.8em;
+            padding: 8px 12px;
         }
 
-        .ia-buttons a.deepseek {
-            background-color: #333333;
-        }
-
-        .ia-buttons a.meta {
-            background-color: #1877F2;
-        }
-
-        .ia-buttons a.copilot {
-            background-color: #0078D4;
-        }
-
+        .ia-buttons a.share-btn,
         #iaModal .modal-buttons .modal-btn-secondary {
-            margin-top: 15px;
-            width: 100%;
-            max-width: 200px;
+            max-width: 160px;
+            font-size: 0.9em;
         }
+    }
+</style>
 
-        .copyable-text {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            background-color: #f5f5f5;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
-        .copyable-text:hover {
-            background-color: #e0e0e0;
-        }
+<link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</noscript>
 
-        .copy-icon {
-            opacity: 0.7;
-            transition: opacity 0.2s ease;
-        }
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Boletín NO Oficial" />
+<meta property="og:description" content="La info del oficial, pero en criollo." />
+<meta property="og:url" content="{{ request.url }}" />
+<meta property="og:site_name" content="Boletín NO Oficial" />
+<meta property="og:image" content="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}" />
+<meta property="og:image:alt" content="Logotipo del Boletín NO Oficial" />
 
-        .copyable-text:hover .copy-icon {
-            opacity: 1;
-        }
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Boletín NO Oficial" />
+<meta name="twitter:description" content="La info del oficial, pero en criollo." />
+<meta name="twitter:image" content="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}" />
+<meta name="twitter:image:alt" content="Logotipo del Boletín NO Oficial" />
+<meta name="twitter:site" content="@BoletinNoOficial" />
+<meta name="twitter:creator" content="@BoletinNoOficial" />
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
-            h1 {
-                font-size: 1.8rem;
-            }
+<meta name="theme-color" content="#000000" />
 
-            .filtro-group {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0.5rem;
-            }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500&family=Secular+One&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500&family=Secular+One&display=swap">
+</noscript>
 
-            .filtro-date {
-                border-radius: 0.375rem 0 0 0.375rem;
-            }
-
-            .filtro-submit {
-                border-radius: 0 0.375rem 0.375rem 0;
-            }
-
-            .aviso {
-                padding: 15px;
-            }
-
-            .titulo a {
-                font-size: 1.1rem;
-            }
-
-            .aviso-actions {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            .btn-copy-prompt {
-                width: 100%;
-                text-align: center;
-            }
-
-            .share-buttons {
-                width: 100%;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .share-btn {
-                padding: 8px 12px;
-                font-size: 0.85rem;
-            }
-
-            .share-btn i {
-                margin-right: 6px;
-            }
-
-            .modal-content {
-                padding: 20px;
-                max-width: 95%;
-            }
-
-            .modal-message {
-                font-size: 1rem;
-            }
-
-            .modal-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .modal-btn {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.6rem;
-            }
-
-            .actualizacion {
-                font-size: 0.8rem;
-            }
-
-            .share-btn {
-                padding: 7px 10px;
-                font-size: 0.75rem;
-            }
-
-            .share-btn i {
-                font-size: 0.85rem;
-            }
-
-            .btn-copy-prompt {
-                font-size: 0.8em;
-                padding: 8px 12px;
-            }
-
-            .ia-buttons a.share-btn,
-            #iaModal .modal-buttons .modal-btn-secondary {
-                max-width: 160px;
-                font-size: 0.9em;
-            }
-        }
-    </style>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" media="print"
-        onload="this.media='all'">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
-    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    </noscript>
-
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Boletín NO Oficial" />
-    <meta property="og:description" content="La info del oficial, pero en criollo." />
-    <meta property="og:url" content="{{ request.url }}" />
-    <meta property="og:site_name" content="Boletín NO Oficial" />
-    <meta property="og:image"
-        content="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}" />
-    <meta property="og:image:alt" content="Logotipo del Boletín NO Oficial" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Boletín NO Oficial" />
-    <meta name="twitter:description" content="La info del oficial, pero en criollo." />
-    <meta name="twitter:image"
-        content="{{ url_for('static', filename='img/Boletin_NO_Oficial.png', _external=True) }}" />
-    <meta name="twitter:image:alt" content="Logotipo del Boletín NO Oficial" />
-    <meta name="twitter:site" content="@BoletinNoOficial" />
-    <meta name="twitter:creator" content="@BoletinNoOficial" />
-
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-
-    <meta name="theme-color" content="#000000" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style"
-        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500&family=Secular+One&display=swap"
-        onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500&family=Secular+One&display=swap">
-    </noscript>
-
-    <meta name="robots" content="index, follow" />
-</head>
+<meta name="robots" content="index, follow" />

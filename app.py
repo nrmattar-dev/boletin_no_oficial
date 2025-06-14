@@ -153,38 +153,40 @@ def resumen_diario():
         )
 
     def formatear_resumen(texto):
-        # Procesar negritas (**texto** → <strong>texto</strong>)
-        texto = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', texto)
-        
-        # Procesar SOLO los paréntesis al final que contienen palabras clave
-        def formatear_palabras_clave(match):
-            # Solo procesar si está al final de la línea/item
-            if match.group(0).endswith(')'):
-                contenido = match.group(1)
-                # Verificar si es una lista de palabras clave (sin texto explicativo)
-                if re.match(r'^([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\-]+\s*,\s*)*[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\-]+$', contenido):
-                    palabras = [p.strip().replace('*', '') for p in contenido.split(',') if p.strip()]
-                    links = [f'<a href="/?texto={p.replace(" ", "+")}" class="keyword-link">{p}</a>' for p in palabras]
-                    return f'(Palabras Clave: {", ".join(links)})'
-            return f'({contenido})'  # Devolver sin cambios si no son palabras clave
 
-        texto = re.sub(r'\((.*?)\)', formatear_palabras_clave, texto)
-        
-        # Añadir estructura de items
-        texto = re.sub(r'(\d+\.\s)', r'<div class="resumen-item">\1', texto)
-        
-        # Manejo de saltos de línea - SOLO convertir saltos dobles
-        # y preservar los saltos simples dentro del texto
-        lineas = []
-        for linea in texto.split('\n'):
-            if linea.strip():  # Si la línea no está vacía
-                lineas.append(linea)
-            else:  # Si es un salto de línea doble
-                if lineas:  # Evitar añadir br al principio
-                    lineas.append('<br>')
-        
-        return '\n'.join(lineas)
+        # 1. Normalizar saltos
+        texto = texto.replace('\r\n', '\n').replace('\r', '\n')
 
+        # 2. Separar por ítems (usamos lookahead para conservar los encabezados)
+        items = re.split(r'(?=^\d+\.\s)', texto, flags=re.MULTILINE)
+
+        # 3. Procesamiento de cada ítem
+        def formatear_item(item):
+            # Negritas
+            item = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', item)
+
+            # Palabras clave
+            def formatear_palabras_clave(match):
+                if match.group(0).endswith(')'):
+                    contenido = match.group(1)
+                    if re.match(r'^([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\-]+\s*,\s*)*[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\-]+$', contenido):
+                        palabras = [p.strip().replace('*', '') for p in contenido.split(',') if p.strip()]
+                        links = [f'<a href="/?texto={p.replace(" ", "+")}" class="keyword-link">{p}</a>' for p in palabras]
+                        return f'(Palabras Clave: {", ".join(links)})'
+                return f'({match.group(1)})'
+
+            item = re.sub(r'\((.*?)\)', formatear_palabras_clave, item)
+
+            return f'<div class="resumen-item">{item.strip()}</div>'
+
+        # 4. Armar HTML final
+        html = '\n'.join([formatear_item(item) for item in items if item.strip()])
+
+        return html
+
+
+    #with open("debug.txt", "w", encoding="utf-8") as f:
+    #    f.write(repr(resultado[0]))
     resumen_formateado = formatear_resumen(resultado[0])
     resumen_final = resumen_formateado
 

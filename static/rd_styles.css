@@ -1,0 +1,165 @@
+/* ==========================================================================
+   Componente: Resumen Diario
+   Descripción: Estilos para el contenedor y los elementos del resumen.
+   ========================================================================== */
+
+/* -----------------------------------------
+   Encabezado
+   ----------------------------------------- */
+
+   .encabezado-resumen {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #007bff;
+    color: #333;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+/* Título principal del resumen (alternativa a .encabezado-resumen) */
+.titulo-resumen {
+    color: #326ecb;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.fecha-resumen {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+
+/* -----------------------------------------
+   Filtro de Fecha
+   ----------------------------------------- */
+
+.filtro-fecha-resumen {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: 2em;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5em;
+}
+
+.filtro-fecha-resumen input[type="date"] {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-family: inherit;
+}
+
+.fecha-btn {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.fecha-btn:hover {
+    background-color: #e0e0e0;
+}
+
+
+/* -----------------------------------------
+   Contenido Principal del Resumen
+   ----------------------------------------- */
+
+.TextoResumido {
+    line-height: 1.6;
+    text-align: justify;
+    font-size: 1rem;
+    color: #333;
+}
+
+/*
+ * Nota: El espaciado entre párrafos o secciones se maneja con la clase '.resumen-item'.
+ * Se desaconseja dar estilo a las etiquetas <br> para crear espacio.
+ */
+.resumen-item {
+    display: block;
+    margin-bottom: 1.5rem;
+}
+
+.resumen-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Los párrafos dentro del resumen no deben tener márgenes adicionales */
+.TextoResumido p {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* -----------------------------------------
+   Elementos de Texto (Negritas y Links)
+   ----------------------------------------- */
+
+.TextoResumido strong {
+    font-weight: 600;
+    color: #1e40af; /* Se unifica el color para consistencia */
+    font-style: normal;
+    text-transform: none;
+}
+
+.keyword-link {
+    color: #1e40af;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font: inherit; /* Hereda la fuente del padre */
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    transition: background-color 0.2s, text-decoration 0.2s;
+}
+
+.keyword-link:hover {
+    text-decoration: underline;
+    background-color: #f0f7ff;
+}
+
+
+/* -----------------------------------------
+   Botones de Acción
+   ----------------------------------------- */
+
+
+.share-buttons-resumen {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+/*En esta pagina piso por jerarquía*/
+.aviso{
+    margin-bottom: 0;
+}
+/* ==========================================================================
+   Diseño Responsivo (Mobile)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .filtro-fecha-resumen {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-areas:
+        "anterior fecha siguiente"
+        "submit submit submit";
+      gap: 1em;
+      margin-top: 0;
+    }
+
+    .filtro-fecha-resumen .anterior     { grid-area: anterior; }
+    .filtro-fecha-resumen input         { grid-area: fecha; }
+    .filtro-fecha-resumen .siguiente    { grid-area: siguiente; }
+    .filtro-fecha-resumen .filtro-submit { grid-area: submit; width: 100%; }
+}
