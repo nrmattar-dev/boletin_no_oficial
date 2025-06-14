@@ -41,7 +41,7 @@
     gap: 2em;
     align-items: center;
     justify-content: center;
-    margin-top: 1.5em;
+    margin-top: 0.7em;
 }
 
 .filtro-fecha-resumen input[type="date"] {
@@ -154,8 +154,8 @@
       grid-template-areas:
         "anterior fecha siguiente"
         "submit submit submit";
-      gap: 1em;
-      margin-top: 0;
+        gap: 0.3em;
+        margin-top: 0.7em;
     }
 
     .filtro-fecha-resumen .anterior     { grid-area: anterior; }
