@@ -203,3 +203,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });    
   });
+
+  function mostrarResumenDiario() {
+    const hoy = new Date().toISOString().split('T')[0];
+    window.location.href = `/resumen-diario?fecha=${hoy}`;
+}

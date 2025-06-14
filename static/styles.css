@@ -857,3 +857,236 @@ button:hover {
     }
 }
 */
+/* Resumen diario */
+.btn-resumen-diario {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 10px 0;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.btn-resumen-diario:hover {
+    background-color: #45a049;
+}
+
+.filtro-fecha-resumen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.filtro-fecha-resumen input[type="date"] {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-family: inherit;
+}
+
+.fecha-btn {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.fecha-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.TextoResumido {
+    line-height: 1.8;
+    text-align: justify;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.TextoResumido b {
+    color: #1a365d;
+}
+
+.TextoResumido strong {
+    color: #1a365d;
+    font-weight: 600;
+    text-transform: none;
+    font-style: normal;
+}
+
+.TextoResumido br {
+    display: block;
+    margin-bottom: 1.2rem;
+    content: "";
+}
+
+.titulo-resumen {
+    color: #326ecb;
+    text-align: center;
+}
+
+.fecha-resumen {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+}
+
+.share-buttons-resumen {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.keyword-link {
+    color: #1e40af;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.keyword-link:hover {
+    text-decoration: underline;
+}
+
+/* Espaciado entre items */
+.TextoResumido {
+    line-height: 1.7;
+}
+
+.TextoResumido br + br {
+    display: block;
+    margin-bottom: 1.5rem;
+    content: "";
+}
+
+/* Estilo para palabras clave */
+.keyword-link {
+    color: #1e40af;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+}
+
+.keyword-link:hover {
+    text-decoration: underline;
+}
+
+/* Eliminar márgenes no deseados */
+.TextoResumido p {
+    margin: 0;
+    padding: 0;
+}
+/* Contenedor principal del resumen */
+.TextoResumido {
+    line-height: 1.5;
+    text-align: left;
+}
+
+/* Cada ítem del resumen */
+.resumen-item {
+    margin-bottom: 1.2rem;
+    padding-top: 0;
+    display: block;
+}
+
+/* Negritas en los títulos */
+.TextoResumido strong {
+    font-weight: 600;
+    color: #1a365d;
+    text-transform: none;
+}
+
+/* Links de palabras clave */
+.keyword-link {
+    color: #1e40af;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+}
+
+.keyword-link:hover {
+    text-decoration: underline;
+}
+
+/* Eliminar espacio superior no deseado */
+.TextoResumido > div:first-child {
+    padding-top: 0;
+    margin-top: 0;
+}
+/* Estructura del resumen */
+.TextoResumido {
+    line-height: 1.6;
+    text-align: left;
+    font-size: 1rem;
+}
+
+/* Cada ítem individual */
+.resumen-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    /*border-bottom: 1px solid #eee;*/
+}
+
+/* Eliminar borde del último item */
+.resumen-item:last-child {
+    border-bottom: none;
+}
+
+/* Títulos en negrita */
+.TextoResumido strong {
+    font-weight: 600;
+    color: #1e40af;
+    font-style: normal;
+}
+
+/* Links de palabras clave */
+.keyword-link {
+    color: #1e40af;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+}
+
+.keyword-link:hover {
+    text-decoration: underline;
+    background-color: #f0f7ff;
+}
+
+/* Espaciado entre líneas */
+.TextoResumido br {
+    content: " ";
+    display: block;
+    margin: 0.5rem 0;
+}
+
+.encabezado-resumen {
+
+        margin-bottom: 2rem;
+        color: #333;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #007bff;
+        font-size: 1.5rem;
+
+}
+

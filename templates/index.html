@@ -10,6 +10,10 @@
 
         {% include 'macros/filtros.html' %}
         
+        <div class="resumen-diario-container">
+            <button onclick="mostrarResumenDiario()" class="btn-resumen-diario">¡Ver el resumen del día!</button>
+        </div>
+                
         {# Primero agrupamos los avisos por categoría #}
         {% set avisos_por_categoria = {} %}
         {% for aviso in avisos %}
