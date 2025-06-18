@@ -28,8 +28,8 @@ def bloquear_user_agents():
         abort(403)
 
 def obtener_conexion():
-    connection_url = os.getenv('POSTGRES_URL_NON_POOLING')
-    #connection_url = os.getenv('POSTGRES_URL_LOCAL')
+    #connection_url = os.getenv('POSTGRES_URL_NON_POOLING')
+    connection_url = os.getenv('POSTGRES_URL_LOCAL')
     # Conectar
     return psycopg2.connect(connection_url)
 
@@ -65,6 +65,14 @@ def obtener_fechas():
         fecha_maxima = fecha_maxima.strftime('%Y-%m-%dT%H:%M:%SZ')
     return fecha_desde, fecha_maxima
 
+# Separar técnico y criollo
+def extraer_texto_tecnico(texto):
+    return texto.split('|¥|')[0].strip()
+
+def extraer_texto_criollo(texto):
+    partes = texto.split('|¥|')
+    return partes[1].strip() if len(partes) > 1 else ""
+
 def convertir_negritas(texto):
     texto_html = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', texto)
     return Markup(texto_html)
@@ -75,6 +83,9 @@ def cortar_texto(texto, limite=500):
     corte = texto[:limite].rsplit(' ', 1)[0]
     resto = texto[len(corte):]
     return corte, resto
+
+def formatear_criollo(texto):
+    return texto.replace('|¥|', '<br><strong>En criollo:</strong> ')
 
 def obtener_avisos_paginado(pagina, fecha_filtro=None,categoria_filtro=None,texto_filtro=None):
     offset = (pagina - 1) * AVISOS_POR_PAGINA
@@ -131,7 +142,7 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None,categoria_filtro=None,text
 def resumen_diario():
     fecha_str = request.args.get('fecha')
     fecha = datetime.now().date()
-    
+
     if fecha_str:
         try:
             fecha = datetime.strptime(fecha_str, "%Y-%m-%d").date()
@@ -146,65 +157,51 @@ def resumen_diario():
 
     if not resultado:
         return render_template('resumendiario.html',
-            resumen_diario=Markup("No hay resumen disponible para esta fecha."),
+            resumen_diario="No hay resumen disponible para esta fecha.",
+            resumen_diario_criollo="",
             fecha_actual=fecha.strftime("%Y-%m-%d"),
             fecha_actualizacion=None,
             modelo="No especificado"
         )
 
-    def formatear_resumen(texto):
+    def convertir_asteriscos_a_negrita(texto):
+        # Reemplaza texto entre **...** por <b>...</b>
+        return re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', texto)
 
-        # 1. Normalizar saltos
-        texto = texto.replace('\r\n', '\n').replace('\r', '\n')
+    def enlazar_palabras_clave(texto):
+        def reemplazar_coincidencia(match):
+            palabras = match.group(1).split(',')
+            links = [f'<a href="/?texto={p.strip()}">{p.strip()}</a>' for p in palabras]
+            return f'(Palabras Clave: {", ".join(links)})'
 
-        # 2. Separar por ítems (usamos lookahead para conservar los encabezados)
-        items = re.split(r'(?=^\d+\.\s)', texto, flags=re.MULTILINE)
+        # Busca el patrón completo de palabras clave
+        return re.sub(r'\(Palabras Clave:\s*([^)]+)\)', reemplazar_coincidencia, texto)        
 
-        # 3. Procesamiento de cada ítem
-        def formatear_item(item):
-            # Negritas
-            item = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', item)
-
-            # Palabras clave
-            def formatear_palabras_clave(match):
-                if match.group(0).endswith(')'):
-                    contenido = match.group(1)
-                    if re.match(r'^([a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\-]+\s*,\s*)*[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\-]+$', contenido):
-                        palabras = [p.strip().replace('*', '') for p in contenido.split(',') if p.strip()]
-                        links = [f'<a href="/?texto={p.replace(" ", "+")}" class="keyword-link">{p}</a>' for p in palabras]
-                        return f'(Palabras Clave: {", ".join(links)})'
-                return f'({match.group(1)})'
-
-            item = re.sub(r'\((.*?)\)', formatear_palabras_clave, item)
-
-            return f'<div class="resumen-item">{item.strip()}</div>'
-
-        # 4. Armar HTML final
-        html = '\n'.join([formatear_item(item) for item in items if item.strip()])
-
-        return html
-
-
-    #with open("debug.txt", "w", encoding="utf-8") as f:
-    #    f.write(repr(resultado[0]))
-    resumen_formateado = formatear_resumen(resultado[0])
-
-    def limpiar_html_para_texto_plano(html):
-        texto = re.sub(r'<[^>]+>', '', html)  # Elimina todas las etiquetas HTML
-        texto = re.sub(r'\s+', ' ', texto).strip()  # Limpia espacios múltiples
-        return texto
-
-    resumen_plano = limpiar_html_para_texto_plano(resumen_formateado)
-
-    resumen_final = resumen_formateado
-
+    def resaltar_numeradores(texto):
+        puntos = texto.split('|n|')  # separar por |n|
+        puntos_resaltados = []
+        for p in puntos:
+            # Buscar patrón "numero." al inicio y ponerlo en negrita
+            p = re.sub(r'^(\d+\.)', r'<b>\1</b>', p.strip())
+            puntos_resaltados.append(p)
+        return '|n|'.join(puntos_resaltados)
+    
+    texto_resumen = convertir_asteriscos_a_negrita(resultado[0])
+    # Separar por |¥|
+    partes = texto_resumen.split('|¥|')
+    texto_normal = enlazar_palabras_clave(resaltar_numeradores(partes[0].strip()))
+    texto_criollo = enlazar_palabras_clave(resaltar_numeradores(partes[1].strip() if len(partes) > 1 else ""))
+    texto_normal = '<p>' + texto_normal.replace('|n|', '</p><p>') + '</p>'
+    texto_criollo = '<p>' + texto_criollo.replace('|n|', '</p><p>') + '</p>'
     return render_template('resumendiario.html',
-        resumen_diario=Markup(resumen_final),
-        resumen_plano=resumen_plano,
+        resumen_diario=texto_normal,
+        resumen_diario_criollo=texto_criollo,
+        resumen_plano=texto_resumen.replace('|¥|','\n'),
         fecha_actual=fecha.strftime("%Y-%m-%d"),
-        fecha_actualizacion=resultado[1].strftime('%Y-%m-%dT%H:%M:%SZ') if resultado[1] else datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
+        fecha_actualizacion=resultado[1].strftime('%Y-%m-%dT%H:%M:%SZ') if resultado[1] else None,
         modelo=resultado[2] if resultado[2] else "No especificado"
     )
+
 
 @app.route('/aviso/<int:id>')
 def mostrar_aviso(id):
@@ -225,9 +222,16 @@ def mostrar_aviso(id):
     aviso = dict(zip(columnas, row))
 
     texto_a_usar = aviso['TextoResumido'] or f"RESUMEN AÚN NO GENERADO. TEXTO COMPLETO: {aviso['Texto']}"
-    corto, largo = cortar_texto(texto_a_usar)
+    texto_tecnico = extraer_texto_tecnico(texto_a_usar)
+    texto_criollo = extraer_texto_criollo(texto_a_usar)
+
+    # Cortar técnico en dos
+    corto, largo = cortar_texto(texto_tecnico)
+
+    # Convertir con negritas
     aviso['TextoResumidoCorto'] = convertir_negritas(corto)
     aviso['TextoResumidoLargo'] = convertir_negritas(largo)
+    aviso['TextoResumidoCriollo'] = convertir_negritas(texto_criollo)
 
     return render_template('aviso.html', aviso=aviso)
 
@@ -257,10 +261,16 @@ def index(pagina=1):
         if not texto_a_usar:
             texto_a_usar = f"RESUMEN AÚN NO GENERADO. TEXTO COMPLETO: {aviso['Texto']}"
 
-        corto, largo = cortar_texto(texto_a_usar)
+        texto_tecnico = extraer_texto_tecnico(texto_a_usar)
+        texto_criollo = extraer_texto_criollo(texto_a_usar)
+
+        # Cortar técnico en dos
+        corto, largo = cortar_texto(texto_tecnico)
+
+        # Convertir con negritas
         aviso['TextoResumidoCorto'] = convertir_negritas(corto)
         aviso['TextoResumidoLargo'] = convertir_negritas(largo)
-
+        aviso['TextoResumidoCriollo'] = convertir_negritas(texto_criollo)
         avisos_final.append(aviso)
 
     fecha_desde, fecha_actualizacion = obtener_fechas()

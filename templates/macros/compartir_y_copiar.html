@@ -3,23 +3,23 @@
 
 
     <div class="share-buttons">
-        <a href="https://api.whatsapp.com/send?text={{ aviso['Titulo'] | urlencode }}%0A%0A{{ aviso['TextoResumidoCorto'] | urlencode }}%0A%0A{{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
+        <a href="https://api.whatsapp.com/send?text={{ (aviso['TextoResumidoCorto'] ~ '\n\n*En criollo:* ' ~ aviso['TextoResumidoCriollo']) | urlencode }}%0A%0A{{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
             class="share-btn whatsapp" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-whatsapp"></i>Whatsapp
         </a>
-        <a href="https://t.me/share/url?text={{ aviso['Titulo'] | urlencode }}%0A%0A{{ aviso['TextoResumidoCorto'] | urlencode }}%0A%0A{{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
+        <a href="https://t.me/share/url?text={{ (aviso['TextoResumidoCorto'] ~ '\n\n*En criollo:* ' ~ aviso['TextoResumidoCriollo']) | urlencode }}%0A%0A{{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
             class="share-btn telegram" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-telegram"></i>Telegram
         </a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u={{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}&title={{ aviso['Titulo'] | urlencode }}&description={{ aviso['TextoResumidoCorto'] | urlencode }}"
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}&title={{ aviso['Titulo'] | urlencode }}&description={{ (aviso['TextoResumidoCorto'] ~ '\n\n*En criollo:* ' ~ aviso['TextoResumidoCriollo']) | urlencode }}"
             class="share-btn facebook" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-facebook"></i>Facebook
         </a>
-        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}&title={{ aviso['Titulo'] | urlencode }}&summary={{ aviso['TextoResumidoCorto'] | urlencode }}&source=BoletínNOOficial"
+        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}&title={{ aviso['Titulo'] | urlencode }}&summary={{ (aviso['TextoResumidoCorto'] ~ '\n\n*En criollo:* ' ~ aviso['TextoResumidoCriollo']) | urlencode }}&source=BoletínNOOficial"
             class="share-btn linkedin" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-linkedin"></i>LinkedIn
         </a>
-        <a href="https://X.com/intent/tweet?text={{ aviso['Titulo'] | urlencode }}%0A%0A{{ aviso['TextoResumidoCorto'] | urlencode }}%0A%0A{{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
+        <a href="https://X.com/intent/tweet?text={{ (aviso['TextoResumidoCorto'] ~ '\n\nEn criollo: ' ~ aviso['TextoResumidoCriollo']) | truncate(200) | urlencode }}%0A%0A{{ url_for('mostrar_aviso', id=aviso.Id, _external=True) | urlencode }}"
             class="share-btn X" target="_blank" rel="noopener noreferrer">
             <i class="fab fa-twitter"></i>X
         </a>

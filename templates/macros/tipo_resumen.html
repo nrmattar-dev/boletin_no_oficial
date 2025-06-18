@@ -1,0 +1,91 @@
+<div class="modo-resumen-toggle">
+    <button id="modoNormal" class="btn modo-btn modo-activo">NORMAL</button>
+    <button id="modoCriollo" class="btn modo-btn">EN CRIOLLO</button>
+</div>
+
+
+
+<style>
+    .modo-resumen-toggle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2em;
+        margin-bottom: 1em;
+        text-align: center;
+    }
+
+    .btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        white-space: nowrap;
+        font-size: 0.85rem;
+    }
+
+    .modo-btn {
+        background-color: #64afff;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+
+    .modo-btn:hover {
+        background-color: #007bff;
+    }
+
+    .modo-activo {
+        background-color: #007bff;
+        animation: none;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btnNormal = document.getElementById('modoNormal');
+        const btnCriollo = document.getElementById('modoCriollo');
+
+        function activarModo(modo) {
+            // Guardamos la selección en localStorage
+            localStorage.setItem('modoResumen', modo);
+
+            if (modo === 'normal') {
+                btnNormal.classList.add('modo-activo');
+                btnCriollo.classList.remove('modo-activo');
+                document.querySelectorAll('.TextoResumidoNormal').forEach(el => el.style.display = 'block');
+                document.querySelectorAll('.TextoResumidoCriollo').forEach(el => el.style.display = 'none');
+            } else {
+                btnNormal.classList.remove('modo-activo');
+                btnCriollo.classList.add('modo-activo');
+                document.querySelectorAll('.TextoResumidoNormal').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.TextoResumidoCriollo').forEach(el => el.style.display = 'block');
+            }
+        }
+
+        // Listeners
+        btnNormal.addEventListener('click', () => activarModo('normal'));
+        btnCriollo.addEventListener('click', () => activarModo('criollo'));
+
+        // Leer preferencia del usuario o default a 'normal'
+        const modoGuardado = localStorage.getItem('modoResumen') || 'normal';
+        activarModo(modoGuardado);
+    });
+</script>

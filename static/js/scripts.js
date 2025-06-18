@@ -1,7 +1,7 @@
 function toggleTextoResumido(i) {
     const moreText = document.getElementById("more-" + i);
     const dots = document.getElementById("dots-" + i);
-    const btnText = document.getElementById("btn-" + i);
+    const btnText = document.getElementById("btn-mostrar-" + i);
 
     if (moreText.style.display === "none") {
         moreText.style.display = "inline";

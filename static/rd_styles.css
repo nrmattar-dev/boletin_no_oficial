@@ -6,10 +6,13 @@
 /* -----------------------------------------
    Encabezado
    ----------------------------------------- */
+   a, b {
+    text-decoration: none;
+    color: #1e40af;
+}
 
    .encabezado-resumen {
     margin-bottom: 2rem;
-    padding-bottom: 1rem;
     border-bottom: 2px solid #007bff;
     color: #333;
     font-size: 1.5rem;
@@ -92,7 +95,7 @@
 
 /* Los párrafos dentro del resumen no deben tener márgenes adicionales */
 .TextoResumido p {
-    margin: 0;
+    margin-bottom:2em;
     padding: 0;
 }
 
@@ -144,6 +147,7 @@
 .aviso{
     margin-bottom: 0;
 }
+
 /* ==========================================================================
    Diseño Responsivo (Mobile)
    ========================================================================== */

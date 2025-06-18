@@ -14,9 +14,11 @@
             <div class="fecha">
                 Publicado el <span class="dd-mm-yyyy" data-utc="{{ aviso.FechaPublicacion }}">Cargando...</span> (Modelo IA utilizado: {{ aviso.Modelo }})
             </div>
-            <div class="TextoResumido">
-
-                {{ aviso.TextoResumidoCorto | safe}}{{ aviso.TextoResumidoLargo | safe}}
+            <div class="TextoResumido TextoResumidoNormal">
+                {{ aviso.TextoResumidoCorto | safe}}{{ aviso.TextoResumidoLargo | safe}}</p>
+            </div>
+            <div class="TextoResumido TextoResumidoCriollo">
+                {{ aviso.TextoResumidoCriollo |safe }}
             </div>
 
             {% include 'macros/compartir_y_copiar.html' %}

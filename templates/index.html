@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-{% include 'macros/head.html' %}
+    {% include 'macros/head.html' %}
 </head>
+
 <body>
     <div class="container">
 
@@ -11,21 +13,25 @@
         {% include 'macros/filtros.html' %}
 
         {% include 'macros/disclaimer.html' %}
-      
+
+        
+
+        
         {# Primero agrupamos los avisos por categoría #}
+       
         {% set avisos_por_categoria = {} %}
         {% for aviso in avisos %}
-            {% if aviso['Categoria'] not in avisos_por_categoria %}
-                {% set _ = avisos_por_categoria.update({aviso['Categoria']: []}) %}
-            {% endif %}
-            {% set _ = avisos_por_categoria[aviso['Categoria']].append(aviso) %}
+        {% if aviso['Categoria'] not in avisos_por_categoria %}
+        {% set _ = avisos_por_categoria.update({aviso['Categoria']: []}) %}
+        {% endif %}
+        {% set _ = avisos_por_categoria[aviso['Categoria']].append(aviso) %}
         {% endfor %}
 
         {# Luego iteramos por cada categoría #}
         {% for categoria, avisos_categoria in avisos_por_categoria.items() %}
         <div class="categoria-grupo">
             <h2 class="categoria-titulo">{{ categoria }}</h2>
-            
+
             {# Iteramos los avisos de esta categoría #}
             {% for aviso in avisos_categoria %}
             <div class="aviso">
@@ -36,17 +42,28 @@
                 </div>
 
                 <div class="fecha">
-                    Publicado el <span class="dd-mm-yyyy" data-utc="{{ aviso['FechaPublicacion'] }}">Cargando...</span> (Modelo IA utilizado: {{ aviso['Modelo'] }})
+                    Publicado el <b>
+                    <a href="{{ url_for('resumen_diario') }}?fecha={{ aviso['FechaPublicacion'].strftime('%Y-%m-%d') }}">
+                        <span class="dd-mm-yyyy" data-utc="{{ aviso['FechaPublicacion'] }}">Cargando...</span>
+                    </a></b>
+                    (Modelo IA utilizado: {{ aviso['Modelo'] }})
                 </div>
-                <div class="TextoResumido" id="TextoResumido-{{ loop.index }}">
-                    {{ aviso['TextoResumidoCorto'] }}{% if aviso['TextoResumidoLargo'] %}<span id="more-{{ loop.index }}"
-                        style="display:none;">{{ aviso['TextoResumidoLargo'] }}</span><span
-                        id="dots-{{ loop.index }}">...</span>{% endif %}
-                </div>
-                {% if aviso['TextoResumidoLargo'] %}
-                <button onclick="toggleTextoResumido({{ loop.index }})" id="btn-{{ loop.index }}">Mostrar más</button>
-                {% endif %}
 
+                <div class="TextoResumido TextoResumidoNormal">
+                    <div class="TextoResumido" id="TextoResumido-{{ aviso.Id }}">
+                        {{ aviso['TextoResumidoCorto'] }}{% if aviso['TextoResumidoLargo']
+                        %}<span id="more-{{ aviso.Id }}" style="display:none;">{{ aviso['TextoResumidoLargo']
+                            }}</span><span id="dots-{{ aviso.Id }}">...</span>{% endif %}
+                    </div>
+                    {% if aviso['TextoResumidoLargo'] %}
+                    <button onclick="toggleTextoResumido({{ aviso.Id }})" id="btn-mostrar-{{ aviso.Id }}">Mostrar
+                        más</button>
+                    {% endif %}
+                </div>
+
+                <div class="TextoResumido TextoResumidoCriollo" style="display: none;">
+                <p>{{ aviso['TextoResumidoCriollo']|safe }}</p>
+            </div>
                 {% include 'macros/compartir_y_copiar.html' %}
             </div>
             {% endfor %}
@@ -59,12 +76,14 @@
             {% set current_texto = request.args.get('texto', '') %}
 
             {% if pagina > 1 %}
-            <a href="{{ url_for('index', pagina=pagina - 1, fecha=current_fecha, categoria=current_categoria, texto=current_texto) }}">&laquo;
+            <a
+                href="{{ url_for('index', pagina=pagina - 1, fecha=current_fecha, categoria=current_categoria, texto=current_texto) }}">&laquo;
                 Anterior</a>
             {% endif %}
             <span>Página {{ pagina }} de {{ total_paginas }}</span>
             {% if pagina < total_paginas %} <a
-                href="{{ url_for('index', pagina=pagina + 1, fecha=current_fecha, categoria=current_categoria, texto=current_texto) }}">Siguiente
+                href="{{ url_for('index', pagina=pagina + 1, fecha=current_fecha, categoria=current_categoria, texto=current_texto) }}">
+                Siguiente
                 &raquo;</a>
                 {% endif %}
         </div>
@@ -78,4 +97,5 @@
     <script defer src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
 </body>
+
 </html>

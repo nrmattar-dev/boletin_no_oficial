@@ -409,6 +409,10 @@
         margin-bottom: 25px;
     }
 
+    [id^="btn-mostrar-"] {
+        margin-bottom: 1em;
+    }
+
     .titulo a {
         font-size: 1.25rem;
         font-weight: 600;
@@ -425,6 +429,11 @@
         color: #666;
         margin-top: 8px;
         margin-bottom: 15px;
+    }
+
+    .fecha a {
+        text-decoration: none;
+        color: #666;
     }
 
     .TextoResumido {
@@ -794,6 +803,7 @@
             font-size: 0.9em;
         }
     }
+
 </style>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" media="print" onload="this.media='all'">
