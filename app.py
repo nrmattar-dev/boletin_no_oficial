@@ -86,8 +86,8 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None, categoria_filtro=None, te
         palabras = [p.strip().upper() for p in texto_filtro.split(',') if p.strip()]
         for palabra in palabras:
             # Importante: Aquí solo filtramos por 'titulo' que está en la tabla 'avisos'
-            # 'textoresumido' no está en la tabla base, por lo que no se puede filtrar aquí.
-            conditions.append("UPPER(titulo) LIKE UPPER(%s)")
+            conditions.append("(UPPER(titulo) LIKE UPPER(%s) OR UPPER(textoresumido) LIKE UPPER(%s))")
+            params.append(f'%{palabra}%')
             params.append(f'%{palabra}%')
 
     if categoria_filtro:
