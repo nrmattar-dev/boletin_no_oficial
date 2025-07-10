@@ -50,13 +50,7 @@
                 </div>
 
                 <div class="TextoResumido TextoResumidoNormal">
-                    <div class="TextoResumido" id="TextoResumido-{{ aviso.id }}">
-                        {{aviso['textoresumidocorto']}}
-                        {% if aviso['textoresumidolargo']%}
-                        <span id="more-{{ aviso.id }}" style="display:none;">{{aviso['textoresumidolargo']}}</span>
-                        <span id="dots-{{ aviso.id }}">...</span>
-                        {% endif %}
-                    </div>
+                    <div class="TextoResumido" id="TextoResumido-{{ aviso.id }}">{{ aviso['textoresumidocorto']|trim|safe }}{% if aviso['textoresumidolargo'] %}<span id="more-{{ aviso.id }}" style="display:none;">{{ aviso['textoresumidolargo']|trim|safe }}</span><span id="dots-{{ aviso.id }}">...</span>{% endif %}</div>
                     {% if aviso['textoresumidolargo'] %}
                     <button onclick="toggleTextoResumido({{ aviso.id }})" id="btn-mostrar-{{ aviso.id }}">Mostrar
                         más</button>
@@ -64,15 +58,9 @@
                 </div>
 
                 <div class="TextoResumido TextoResumidoCriollo" style="display: none;">
-                    <div class="TextoResumido" id="TextoResumidoCriollo-{{ aviso.id }}"> {# Changed to lowercase 'id' #}
-                        {{aviso['textoresumidocriollocorto']|safe}} 
-                        {% if aviso['textoresumidocriollolargo'] %} 
-                        <span id="more-criollo-{{ aviso.id }}" style="display:none;">{{aviso['textoresumidocriollolargo']|safe}}</span> 
-                        <span id="dots-{{ aviso.id }}">...</span>
-                        {% endif %}
-                    </div>
-                    {% if aviso['textoresumidocriollolargo'] %} 
-                    <button onclick="toggleTextoResumidoCriollo({{ aviso.id }})" id="btn-mostrar-criollo-{{ aviso.id }}">Mostrar más</button> {# Changed to lowercase 'id' #}
+                    <div class="TextoResumido" id="TextoResumidoCriollo-{{ aviso.id }}">{{ aviso['textoresumidocriollocorto']|trim|safe }}{% if aviso['textoresumidocriollolargo'] %}<span id="more-criollo-{{ aviso.id }}" style="display:none;">{{ aviso['textoresumidocriollolargo']|trim|safe }}</span><span id="dots-criollo-{{ aviso.id }}">...</span>{% endif %}</div>
+                    {% if aviso['textoresumidocriollolargo'] %}
+                    <button onclick="toggleTextoResumidoCriollo({{ aviso.id }})" id="btn-mostrar-criollo-{{ aviso.id }}">Mostrar más</button>
                     {% endif %}
                 </div>
 
@@ -104,7 +92,7 @@
 
     {% include 'macros/ia_modal.html' %}
 
-    <script defer src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
     <script>
         function toggleTextoResumido(id) {
