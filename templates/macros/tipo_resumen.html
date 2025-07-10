@@ -63,8 +63,8 @@
         const btnNormal = document.getElementById('modoNormal');
         const btnCriollo = document.getElementById('modoCriollo');
 
+
         function activarModo(modo) {
-            // Guardamos la selección en localStorage
             localStorage.setItem('modoResumen', modo);
 
             if (modo === 'normal') {
@@ -72,13 +72,18 @@
                 btnCriollo.classList.remove('modo-activo');
                 document.querySelectorAll('.TextoResumidoNormal').forEach(el => el.style.display = 'block');
                 document.querySelectorAll('.TextoResumidoCriollo').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.TituloNormal').forEach(el => el.style.display = 'inline');
+                document.querySelectorAll('.TituloCriollo').forEach(el => el.style.display = 'none');
             } else {
                 btnNormal.classList.remove('modo-activo');
                 btnCriollo.classList.add('modo-activo');
                 document.querySelectorAll('.TextoResumidoNormal').forEach(el => el.style.display = 'none');
                 document.querySelectorAll('.TextoResumidoCriollo').forEach(el => el.style.display = 'block');
+                document.querySelectorAll('.TituloNormal').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.TituloCriollo').forEach(el => el.style.display = 'inline');
             }
         }
+
 
         // Listeners
         btnNormal.addEventListener('click', () => activarModo('normal'));

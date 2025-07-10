@@ -13,18 +13,16 @@
         {% include 'macros/filtros.html' %}
 
         {% include 'macros/disclaimer.html' %}
-
-        
-
         
         {# Primero agrupamos los avisos por categoría #}
-       
+        
         {% set avisos_por_categoria = {} %}
         {% for aviso in avisos %}
-        {% if aviso['Categoria'] not in avisos_por_categoria %}
-        {% set _ = avisos_por_categoria.update({aviso['Categoria']: []}) %}
+        {# Access 'categoria' in lowercase #}
+        {% if aviso['categoria'] not in avisos_por_categoria %}
+        {% set _ = avisos_por_categoria.update({aviso['categoria']: []}) %}
         {% endif %}
-        {% set _ = avisos_por_categoria[aviso['Categoria']].append(aviso) %}
+        {% set _ = avisos_por_categoria[aviso['categoria']].append(aviso) %}
         {% endfor %}
 
         {# Luego iteramos por cada categoría #}
@@ -36,34 +34,48 @@
             {% for aviso in avisos_categoria %}
             <div class="aviso">
                 <div class="titulo">
-                    <a href="{{ aviso['Enlace'] }}" target="_blank">
-                        {{ aviso['Titulo'] }}{% if '?anexo' in aviso['Enlace'] %} (ANEXO){% endif %}
+                    <a href="{{ aviso['enlace'] }}" target="_blank"> 
+                        <h2 class="TituloNormal">{{ aviso['titulotecnico'] or aviso['titulo'] }}</h2> 
+                        <h2 class="TituloCriollo" style="display: none;">{{ aviso['titulocriollo'] or aviso['titulo'] }}</h2> 
+                        {% if '?anexo' in aviso['enlace'] %} (ANEXO){% endif %} 
                     </a>
                 </div>
 
                 <div class="fecha">
                     Publicado el <b>
-                    <a href="{{ url_for('resumen_diario') }}?fecha={{ aviso['FechaPublicacion'].strftime('%Y-%m-%d') }}">
-                        <span class="dd-mm-yyyy" data-utc="{{ aviso['FechaPublicacion'] }}">Cargando...</span>
+                    <a href="{{ url_for('resumen_diario') }}?fecha={{ aviso['fechapublicacion'].strftime('%Y-%m-%d') }}"> 
+                        <span class="dd-mm-yyyy" data-utc="{{ aviso['fechapublicacion'] }}">Cargando...</span> 
                     </a></b>
-                    (Modelo IA utilizado: {{ aviso['Modelo'] }})
+                    (Modelo IA utilizado: {{ aviso['modelo'] }}) 
                 </div>
 
                 <div class="TextoResumido TextoResumidoNormal">
-                    <div class="TextoResumido" id="TextoResumido-{{ aviso.Id }}">
-                        {{ aviso['TextoResumidoCorto'] }}{% if aviso['TextoResumidoLargo']
-                        %}<span id="more-{{ aviso.Id }}" style="display:none;">{{ aviso['TextoResumidoLargo']
-                            }}</span><span id="dots-{{ aviso.Id }}">...</span>{% endif %}
+                    <div class="TextoResumido" id="TextoResumido-{{ aviso.id }}">
+                        {{aviso['textoresumidocorto']}}
+                        {% if aviso['textoresumidolargo']%}
+                        <span id="more-{{ aviso.id }}" style="display:none;">{{aviso['textoresumidolargo']}}</span>
+                        <span id="dots-{{ aviso.id }}">...</span>
+                        {% endif %}
                     </div>
-                    {% if aviso['TextoResumidoLargo'] %}
-                    <button onclick="toggleTextoResumido({{ aviso.Id }})" id="btn-mostrar-{{ aviso.Id }}">Mostrar
+                    {% if aviso['textoresumidolargo'] %}
+                    <button onclick="toggleTextoResumido({{ aviso.id }})" id="btn-mostrar-{{ aviso.id }}">Mostrar
                         más</button>
                     {% endif %}
                 </div>
 
                 <div class="TextoResumido TextoResumidoCriollo" style="display: none;">
-                <p>{{ aviso['TextoResumidoCriollo']|safe }}</p>
-            </div>
+                    <div class="TextoResumido" id="TextoResumidoCriollo-{{ aviso.id }}"> {# Changed to lowercase 'id' #}
+                        {{aviso['textoresumidocriollocorto']|safe}} 
+                        {% if aviso['textoresumidocriollolargo'] %} 
+                        <span id="more-criollo-{{ aviso.id }}" style="display:none;">{{aviso['textoresumidocriollolargo']|safe}}</span> 
+                        <span id="dots-{{ aviso.id }}">...</span>
+                        {% endif %}
+                    </div>
+                    {% if aviso['textoresumidocriollolargo'] %} 
+                    <button onclick="toggleTextoResumidoCriollo({{ aviso.id }})" id="btn-mostrar-criollo-{{ aviso.id }}">Mostrar más</button> {# Changed to lowercase 'id' #}
+                    {% endif %}
+                </div>
+
                 {% include 'macros/compartir_y_copiar.html' %}
             </div>
             {% endfor %}
@@ -76,16 +88,14 @@
             {% set current_texto = request.args.get('texto', '') %}
 
             {% if pagina > 1 %}
-            <a
-                href="{{ url_for('index', pagina=pagina - 1, fecha=current_fecha, categoria=current_categoria, texto=current_texto) }}">&laquo;
-                Anterior</a>
+            <a href="{{ url_for('index', pagina=pagina - 1, fecha=current_fecha, categoria=current_categoria, texto=current_texto) }}">&laquo; Anterior</a>
             {% endif %}
             <span>Página {{ pagina }} de {{ total_paginas }}</span>
-            {% if pagina < total_paginas %} <a
-                href="{{ url_for('index', pagina=pagina + 1, fecha=current_fecha, categoria=current_categoria, texto=current_texto) }}">
-                Siguiente
-                &raquo;</a>
-                {% endif %}
+            {% if pagina < total_paginas %}
+            <a href="{{ url_for('index', pagina=pagina + 1, fecha=current_fecha, categoria=current_categoria, texto=current_texto) }}">
+                Siguiente &raquo;
+            </a>
+            {% endif %}
         </div>
         {% include 'macros/arriba.html' %}
         {% include 'macros/donar.html' %}
@@ -95,6 +105,40 @@
     {% include 'macros/ia_modal.html' %}
 
     <script defer src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+    <script>
+        function toggleTextoResumido(id) {
+            const moreText = document.getElementById("more-" + id);
+            const dots = document.getElementById("dots-" + id);
+            const btn = document.getElementById("btn-mostrar-" + id);
+
+            if (moreText.style.display === "none") {
+                moreText.style.display = "inline";
+                dots.style.display = "none";
+                btn.textContent = "Mostrar menos";
+            } else {
+                moreText.style.display = "none";
+                dots.style.display = "inline";
+                btn.textContent = "Mostrar más";
+            }
+        }
+
+        function toggleTextoResumidoCriollo(id) {
+            const moreText = document.getElementById("more-criollo-" + id);
+            const dots = document.getElementById("dots-criollo-" + id);
+            const btn = document.getElementById("btn-mostrar-criollo-" + id);
+
+            if (moreText.style.display === "none") {
+                moreText.style.display = "inline";
+                dots.style.display = "none";
+                btn.textContent = "Mostrar menos";
+            } else {
+                moreText.style.display = "none";
+                dots.style.display = "inline";
+                btn.textContent = "Mostrar más";
+            }
+        }
+    </script>
 
 </body>
 

@@ -9,16 +9,21 @@
         {% include 'macros/disclaimer.html' %}
         <div class="aviso">
             <div class="titulo">
-                <h2>{{ aviso.Titulo }}</h2>
+                <a href="{{ aviso.enlace }}" target="_blank"> {# Changed to aviso.enlace #}
+                    <h2 class="TituloNormal">{{ aviso.titulotecnico or aviso.titulo }}</h2> {# Changed to lowercase #}
+                    <h2 class="TituloCriollo" style="display: none;">{{ aviso.titulocriollo or aviso.titulo }}</h2> {# Changed to lowercase #}
+                    {% if '?anexo' in aviso['enlace'] %} (ANEXO){% endif %} {# Changed to aviso['enlace'] #}
+                </a>
             </div>
+
             <div class="fecha">
-                Publicado el <span class="dd-mm-yyyy" data-utc="{{ aviso.FechaPublicacion }}">Cargando...</span> (Modelo IA utilizado: {{ aviso.Modelo }})
+                Publicado el <span class="dd-mm-yyyy" data-utc="{{ aviso.fechapublicacion }}">Cargando...</span> (Modelo IA utilizado: {{ aviso.modelo }}) {# Changed to lowercase #}
             </div>
             <div class="TextoResumido TextoResumidoNormal">
-                {{ aviso.TextoResumidoCorto | safe}}{{ aviso.TextoResumidoLargo | safe}}</p>
+                {{ aviso.textoresumidocorto | safe }}{{ aviso.textoresumidolargo | safe}}</p> 
             </div>
             <div class="TextoResumido TextoResumidoCriollo">
-                {{ aviso.TextoResumidoCriollo |safe }}
+                {{ aviso.textoresumidocriollocorto | safe }}{{ aviso.textoresumidocriollolargo | safe}} 
             </div>
 
             {% include 'macros/compartir_y_copiar.html' %}
