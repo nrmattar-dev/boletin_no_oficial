@@ -50,17 +50,28 @@
                 </div>
 
                 <div class="TextoResumido TextoResumidoNormal">
-                    <div class="TextoResumido" id="TextoResumido-{{ aviso.id }}">{{ aviso['textoresumidocorto']|trim|safe }}{% if aviso['textoresumidolargo'] %}<span id="more-{{ aviso.id }}" style="display:none;">{{ aviso['textoresumidolargo']|trim|safe }}</span><span id="dots-{{ aviso.id }}">...</span>{% endif %}</div>
-                    {% if aviso['textoresumidolargo'] %}
-                    <button onclick="toggleTextoResumido({{ aviso.id }})" id="btn-mostrar-{{ aviso.id }}">Mostrar
-                        más</button>
+                    <div class="TextoResumido" id="TextoResumido-{{ aviso.id }}">
+                        {{ aviso['textoresumidocorto']|trim|safe }}
+                        {% if aviso['textoresumidolargo'] and aviso['textoresumidolargo']|trim != 'None' and aviso['textoresumidolargo']|trim != '' %}
+                            <span id="more-{{ aviso.id }}" style="display:none;">{{ aviso['textoresumidolargo']|trim|safe }}</span>
+                            <span id="dots-{{ aviso.id }}">...</span>
+                        {% endif %}
+                    </div>
+                    {% if aviso['textoresumidolargo'] and aviso['textoresumidolargo']|trim != 'None' and aviso['textoresumidolargo']|trim != '' %}
+                        <button onclick="toggleTextoResumido({{ aviso.id }})" id="btn-mostrar-{{ aviso.id }}">Mostrar más</button>
                     {% endif %}
                 </div>
-
+                
                 <div class="TextoResumido TextoResumidoCriollo" style="display: none;">
-                    <div class="TextoResumido" id="TextoResumidoCriollo-{{ aviso.id }}">{{ aviso['textoresumidocriollocorto']|trim|safe }}{% if aviso['textoresumidocriollolargo'] %}<span id="more-criollo-{{ aviso.id }}" style="display:none;">{{ aviso['textoresumidocriollolargo']|trim|safe }}</span><span id="dots-criollo-{{ aviso.id }}">...</span>{% endif %}</div>
-                    {% if aviso['textoresumidocriollolargo'] %}
-                    <button onclick="toggleTextoResumidoCriollo({{ aviso.id }})" id="btn-mostrar-criollo-{{ aviso.id }}">Mostrar más</button>
+                    <div class="TextoResumido" id="TextoResumidoCriollo-{{ aviso.id }}">
+                        {{ aviso['textoresumidocriollocorto']|trim|safe }}
+                        {% if aviso['textoresumidocriollolargo'] and aviso['textoresumidocriollolargo']|trim != 'None' and aviso['textoresumidocriollolargo']|trim != '' %}
+                            <span id="more-criollo-{{ aviso.id }}" style="display:none;">{{ aviso['textoresumidocriollolargo']|trim|safe }}</span>
+                            <span id="dots-criollo-{{ aviso.id }}">...</span>
+                        {% endif %}
+                    </div>
+                    {% if aviso['textoresumidocriollolargo'] and aviso['textoresumidocriollolargo']|trim != 'None' and aviso['textoresumidocriollolargo']|trim != '' %}
+                        <button onclick="toggleTextoResumidoCriollo({{ aviso.id }})" id="btn-mostrar-criollo-{{ aviso.id }}">Mostrar más</button>
                     {% endif %}
                 </div>
 

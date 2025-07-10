@@ -38,10 +38,9 @@ def categorias():
 
     conn = obtener_conexion()
     cur = conn.cursor()
-    # Modificado: Consulta directamente la tabla 'avisos' para las categorías
     cur.execute("""
         SELECT DISTINCT categoria
-        FROM avisos
+        FROM avisos_processed
         WHERE UPPER(categoria) LIKE UPPER(%s)
         ORDER BY categoria
         LIMIT 20
@@ -56,8 +55,7 @@ def categorias():
 def obtener_fechas():
     conn = obtener_conexion()
     cursor = conn.cursor()
-    # Modificado: Consulta directamente la tabla 'avisos' para las fechas mínima y máxima
-    cursor.execute('SELECT MIN(fechapublicacion), MAX(timestamp) FROM avisos')
+    cursor.execute('SELECT MIN(fechapublicacion), MAX(timestamp) FROM avisos_processed')
     fecha_desde, fecha_maxima = cursor.fetchone()
     conn.close()
     if fecha_maxima:
@@ -69,11 +67,12 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None, categoria_filtro=None, te
     conn = obtener_conexion()
     cursor = conn.cursor()
 
-    # --- Primera parte: Filtrar y contar en la tabla 'avisos' (la tabla física) ---
-    # Solo seleccionamos las columnas necesarias para el filtrado y el orden
-    base_select_columns = "id, fechapublicacion, categoria, titulo" # Añadimos titulo para el filtro de texto
-    count_query_base = 'SELECT COUNT(*) FROM avisos'
-    base_query_ids = f'SELECT {base_select_columns} FROM avisos'
+    columnas_seleccionadas = "id, titulo, texto, textoresumido, textoresumidocorto, textoresumidolargo, " \
+                             "titulotecnico, titulocriollo, textoresumidocriollocorto, textoresumidocriollolargo, " \
+                             "enlace, fechapublicacion, categoria, modelo, timestamp"
+
+    base_query = f'SELECT {columnas_seleccionadas} FROM avisos_processed'
+    count_query = 'SELECT COUNT(*) FROM avisos_processed'
 
     conditions = []
     params = []
@@ -85,9 +84,8 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None, categoria_filtro=None, te
     if texto_filtro:
         palabras = [p.strip().upper() for p in texto_filtro.split(',') if p.strip()]
         for palabra in palabras:
-            # Importante: Aquí solo filtramos por 'titulo' que está en la tabla 'avisos'
-            # 'textoresumido' no está en la tabla base, por lo que no se puede filtrar aquí.
-            conditions.append("UPPER(titulo) LIKE UPPER(%s)")
+            conditions.append("(UPPER(titulo) LIKE UPPER(%s) OR UPPER(textoresumido) LIKE UPPER(%s))")
+            params.append(f'%{palabra}%')
             params.append(f'%{palabra}%')
 
     if categoria_filtro:
@@ -98,40 +96,14 @@ def obtener_avisos_paginado(pagina, fecha_filtro=None, categoria_filtro=None, te
     if conditions:
         where_clause = " WHERE " + " AND ".join(conditions)
 
-    # Obtener el total de avisos filtrados de la tabla base
-    cursor.execute(count_query_base + where_clause, params)
+    cursor.execute(count_query + where_clause, params)
     total_avisos = cursor.fetchone()[0]
 
-    # Obtener los IDs de los avisos para la página actual de la tabla base
-    # El orden es crucial para el paginado correcto
-    full_query_ids = base_query_ids + where_clause + ' ORDER BY fechapublicacion DESC, categoria, id LIMIT %s OFFSET %s'
-    cursor.execute(full_query_ids, params + [AVISOS_POR_PAGINA, offset])
+    full_query = base_query + where_clause + ' ORDER BY fechapublicacion DESC, categoria, id LIMIT %s OFFSET %s'
+    cursor.execute(full_query, params + [AVISOS_POR_PAGINA, offset])
     
-    # Extraemos solo los IDs de los resultados de la tabla base
-    ids_para_pagina = [row[0] for row in cursor.fetchall()]
-
-    avisos = []
-    if ids_para_pagina:
-        # --- Segunda parte: Consultar la vista 'avisos_processed' solo para los IDs obtenidos ---
-        columnas_seleccionadas_vista = "id, titulo, texto, textoresumido, textoresumidocorto, textoresumidolargo, " \
-                                       "titulotecnico, titulocriollo, textoresumidocriollocorto, textoresumidocriollolargo, " \
-                                       "enlace, fechapublicacion, categoria, modelo, timestamp"
-        
-        # Creamos una cadena de placeholders para la cláusula IN
-        placeholders = ','.join(['%s'] * len(ids_para_pagina))
-        
-        # Consultamos la vista avisos_processed usando los IDs filtrados
-        # Mantenemos el ORDER BY para asegurar que el orden de los resultados de la vista coincida con el paginado
-        query_vista_procesada = f'SELECT {columnas_seleccionadas_vista} FROM avisos_processed WHERE id IN ({placeholders}) ORDER BY fechapublicacion DESC, categoria, id'
-        cursor.execute(query_vista_procesada, ids_para_pagina)
-        
-        columnas_db = [desc[0].lower() for desc in cursor.description]
-        avisos = [dict(zip(columnas_db, row)) for row in cursor.fetchall()]
-
-        # Opcional: Si el orden de la consulta IN no es garantizado por el motor de la BD
-        # y necesitas el orden exacto de 'ids_para_pagina', puedes reordenar en Python:
-        # avisos.sort(key=lambda x: ids_para_pagina.index(x['id']))
-        
+    columnas_db = [desc[0].lower() for desc in cursor.description]
+    avisos = [dict(zip(columnas_db, row)) for row in cursor.fetchall()]
     conn.close()
 
     total_paginas = math.ceil(total_avisos / AVISOS_POR_PAGINA) if AVISOS_POR_PAGINA > 0 else 1
@@ -151,7 +123,6 @@ def resumen_diario():
     conn = obtener_conexion()
     cursor = conn.cursor()
     columnas_seleccionadas_resumen = "fecha, texto_normal_html, texto_criollo_html, resumen_plano, modelo"
-    # Esta consulta ya filtra por fecha, lo cual es eficiente para la vista. No se modifica.
     cursor.execute(f'SELECT {columnas_seleccionadas_resumen} FROM resumenes_diarios_processed WHERE fecha = %s', (fecha,))
     resultado = cursor.fetchone()
     
@@ -187,7 +158,6 @@ def mostrar_aviso(id):
     columnas_seleccionadas = "id, titulo, texto, textoresumido, textoresumidocorto, textoresumidolargo, " \
                              "titulotecnico, titulocriollo, textoresumidocriollocorto, textoresumidocriollolargo, " \
                              "enlace, fechapublicacion, categoria, modelo, timestamp"
-    # Esta consulta ya filtra por ID, lo cual es eficiente para la vista. No se modifica.
     cursor.execute(f'SELECT {columnas_seleccionadas} FROM avisos_processed WHERE id = %s', (id,))
     resultado = cursor.fetchone()
     
