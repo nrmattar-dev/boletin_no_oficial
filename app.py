@@ -26,7 +26,8 @@ def bloquear_user_agents():
         abort(403)
 
 def obtener_conexion():
-    connection_url = os.getenv('POSTGRES_URL_LOCAL')
+    #connection_url = os.getenv('POSTGRES_URL_LOCAL')
+    connection_url = os.getenv('POSTGRES_URL_NON_POOLING')
     return psycopg2.connect(connection_url)
 
 @app.route('/categorias')
