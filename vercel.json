@@ -1,11 +1,11 @@
 {
     "builds": [
       {
-        "src": "app.py",
-        "use": "@vercel/python"
-      },
-      {
         "src": "api/*.py",
+        "use": "@vercel/python"
+      },      
+      {
+        "src": "app.py",
         "use": "@vercel/python"
       }
     ],
