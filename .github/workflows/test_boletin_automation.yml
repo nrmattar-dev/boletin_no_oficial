@@ -1,49 +1,16 @@
-# .github/workflows/daily_automation.yml
-name: Daily Boletin NO Oficial Automation
+# .github/workflows/test_boletin_automation.yml
+name: Test Boletin Oficial Automation
 
 on:
-  schedule:
-    - cron: '0 14 * * *' # Ejecución diaria (11 AM de Buenos Aires)
-  workflow_dispatch: # Permite ejecutar manualmente
+  workflow_dispatch: # Esto es clave para poder ejecutarlo manualmente
 
 jobs:
-  run_automation:
+  test_automation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set Vercel Deployment URL
-        id: vercel_url
-        run: |
-          echo "VERCEL_URL=https://boletin.encriollo.com.ar" >> $GITHUB_ENV
-
-      # --- Pasos de tu flujo de producción normal ---
-      - name: Call Scrape Function (PROD)
-        run: |
-          echo "Iniciando scraping (PROD)..."
-          curl -X GET "${{ env.VERCEL_URL }}/api/obtener" -H "Content-Type: application/json"
-        env:
-          VERCEL_URL: ${{ env.VERCEL_URL }}
-
-      - name: Call Process Announcements Function (PROD)
-        run: |
-          echo "Iniciando resumen de avisos (PROD)..."
-          curl -X GET "${{ env.VERCEL_URL }}/api/resumir" -H "Content-Type: application/json"
-        env:
-          VERCEL_URL: ${{ env.VERCEL_URL }}
-
-      - name: Call Generate Daily Summary Function (PROD)
-        run: |
-          echo "Iniciando resumen diario (PROD)..."
-          curl -X GET "${{ env.VERCEL_URL }}/api/resumir_dia" -H "Content-Type: application/json"
-        env:
-          VERCEL_URL: ${{ env.VERCEL_URL }}
-
-  test_automation: # Nuevo job para testing, o un step dentro del job existente
-    runs-on: ubuntu-latest
-    needs: [run_automation] # Opcional: Ejecutar después del job de producción si quieres
-    steps:
       - name: Set Vercel Deployment URL for Test
         id: vercel_url_test
         run: |
@@ -59,7 +26,6 @@ jobs:
       - name: Run Full Automation Test (SIMULATE GENERAL ERROR)
         run: |
           echo "Corriendo prueba de flujo completo (simulando error general)..."
-          # Esto hará que el step falle, lo que es bueno para probar las notificaciones de GitHub Actions
           curl -f -X GET "${{ env.VERCEL_URL }}/api/testing?simulate_error=true" -H "Content-Type: application/json"
         env:
           VERCEL_URL: ${{ env.VERCEL_URL }}
