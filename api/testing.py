@@ -234,39 +234,3 @@ def handler(request, response):
 
     print("\n--- SCRIPT DE TESTING COMPLETADO EXITOSAMENTE ---")
     return {"statusCode": 200, "body": "Testing flow completed successfully."}
-
-# Para pruebas locales (opcional, igual que en los otros scripts)
-if __name__ == "__main__":
-    from http.server import BaseHTTPRequestHandler, HTTPServer
-    class MockRequest:
-        def __init__(self, query={}):
-            self.query = query # Mock para query parameters
-        pass
-    class MockResponse:
-        pass
-    
-    class TestHandler(BaseHTTPRequestHandler):
-        def do_GET(self):
-            if self.path.startswith('/api/testing'):
-                from urllib.parse import urlparse, parse_qs
-                parsed_url = urlparse(self.path)
-                query_params = parse_qs(parsed_url.query)
-                mock_query = {k: v[0] for k, v in query_params.items()}
-                
-                result = handler(MockRequest(query=mock_query), MockResponse())
-                self.send_response(result.get("statusCode", 200))
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps(result.get("body", {})).encode('utf-8'))
-            else:
-                self.send_response(404)
-                self.end_headers()
-                self.wfile.write(b'Not Found')
-
-    print("Corriendo servidor de prueba local en http://localhost:8000/api/testing")
-    print("Prueba con: http://localhost:8000/api/testing")
-    print("Prueba error general: http://localhost:8000/api/testing?simulate_error=true")
-    print("Prueba error en Obtener: http://localhost:8000/api/testing?simulate_error_step=obtener")
-    print("Prueba error en Resumir (LLM): http://localhost:8000/api/testing?simulate_llm_error=true")
-    httpd = HTTPServer(('localhost', 8000), TestHandler)
-    httpd.serve_forever()
