@@ -1,0 +1,82 @@
+# .github/workflows/daily_automation.yml
+name: Daily Boletin Oficial Automation
+
+on:
+  schedule:
+    - cron: '0 14 * * *' # Ejecución diaria (11 AM de Buenos Aires)
+  workflow_dispatch: # Permite ejecutar manualmente
+
+jobs:
+  run_automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set Vercel Deployment URL
+        id: vercel_url
+        run: |
+          echo "VERCEL_URL=https://boletin.encriollo.com.ar" >> $GITHUB_ENV
+
+      # --- Pasos de tu flujo de producción normal ---
+      - name: Call Scrape Function (PROD)
+        run: |
+          echo "Iniciando scraping (PROD)..."
+          curl -X GET "${{ env.VERCEL_URL }}/api/obtener" -H "Content-Type: application/json"
+        env:
+          VERCEL_URL: ${{ env.VERCEL_URL }}
+
+      - name: Call Process Announcements Function (PROD)
+        run: |
+          echo "Iniciando resumen de avisos (PROD)..."
+          curl -X GET "${{ env.VERCEL_URL }}/api/resumir" -H "Content-Type: application/json"
+        env:
+          VERCEL_URL: ${{ env.VERCEL_URL }}
+
+      - name: Call Generate Daily Summary Function (PROD)
+        run: |
+          echo "Iniciando resumen diario (PROD)..."
+          curl -X GET "${{ env.VERCEL_URL }}/api/resumir_dia" -H "Content-Type: application/json"
+        env:
+          VERCEL_URL: ${{ env.VERCEL_URL }}
+
+  test_automation: # Nuevo job para testing, o un step dentro del job existente
+    runs-on: ubuntu-latest
+    needs: [run_automation] # Opcional: Ejecutar después del job de producción si quieres
+    steps:
+      - name: Set Vercel Deployment URL for Test
+        id: vercel_url_test
+        run: |
+          echo "VERCEL_URL=https://boletin.encriollo.com.ar" >> $GITHUB_ENV
+
+      - name: Run Full Automation Test (SUCCESS)
+        run: |
+          echo "Corriendo prueba de flujo completo (éxito)..."
+          curl -X GET "${{ env.VERCEL_URL }}/api/testing" -H "Content-Type: application/json"
+        env:
+          VERCEL_URL: ${{ env.VERCEL_URL }}
+
+      - name: Run Full Automation Test (SIMULATE GENERAL ERROR)
+        run: |
+          echo "Corriendo prueba de flujo completo (simulando error general)..."
+          # Esto hará que el step falle, lo que es bueno para probar las notificaciones de GitHub Actions
+          curl -f -X GET "${{ env.VERCEL_URL }}/api/testing?simulate_error=true" -H "Content-Type: application/json"
+        env:
+          VERCEL_URL: ${{ env.VERCEL_URL }}
+        continue-on-error: true # Permite que el workflow continúe a pesar de este fallo simulado
+
+      - name: Run Obtener.py Test (SIMULATE ERROR)
+        run: |
+          echo "Corriendo prueba de Obtener.py (simulando error)..."
+          curl -f -X GET "${{ env.VERCEL_URL }}/api/testing?simulate_error_step=obtener" -H "Content-Type: application/json"
+        env:
+          VERCEL_URL: ${{ env.VERCEL_URL }}
+        continue-on-error: true
+
+      - name: Run Resumir.py Test (SIMULATE LLM ERROR)
+        run: |
+          echo "Corriendo prueba de Resumir.py (simulando error de LLM)..."
+          curl -f -X GET "${{ env.VERCEL_URL }}/api/testing?simulate_llm_error=true" -H "Content-Type: application/json"
+        env:
+          VERCEL_URL: ${{ env.VERCEL_URL }}
+        continue-on-error: true
