@@ -1,5 +1,5 @@
 # .github/workflows/daily_automation.yml
-name: Daily Boletin Oficial Automation
+name: Daily Boletin NO Oficial Automation
 
 on:
   schedule:
